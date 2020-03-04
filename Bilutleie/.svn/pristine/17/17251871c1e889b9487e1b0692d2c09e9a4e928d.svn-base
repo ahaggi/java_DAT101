@@ -1,0 +1,390 @@
+package no.hib.dat101;
+
+import java.util.*;
+import javax.persistence.*;
+
+
+/**
+ * @author Peter Boer, Daniel Moberg og Abdella Haji 
+ *
+ */
+@Entity
+@Table(schema="bilutleie", name="utleiekontor")
+public class Utleiekontor {
+	@Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer kontorNr;
+	
+	@OneToOne
+    @JoinColumn(name="adresse", referencedColumnName="id")
+	private Adresse adresse;
+	private Integer tlfNr;
+	
+    @OneToMany(mappedBy="utleiekontor", cascade=CascadeType.ALL)
+	private List<Bil> biler=new ArrayList<Bil>();
+	
+    @OneToMany(mappedBy="utleieSted", cascade=CascadeType.ALL)
+    private List<Reservasjon> reservasjoner=new ArrayList<Reservasjon>();
+	
+    @OneToMany(mappedBy="utleieSted", cascade=CascadeType.ALL)
+    private List<Utleie> utleie=new ArrayList<Utleie>();
+    
+    @OneToMany(mappedBy="returSted", cascade=CascadeType.ALL)
+	private List<Retur> retur=new ArrayList<Retur>();
+	
+    @ManyToOne
+    @JoinColumn(name="bilutleieselskap", referencedColumnName="navn",insertable=true, updatable=true)
+	private BilutleieSelskap bilutleieSelskap;
+
+	/**
+	 * tom konstruktør
+	 */
+	public Utleiekontor() {
+		
+	}
+	
+	
+	/**
+	 * lag et nytt kontor
+	 */
+	public Utleiekontor(Adresse adresse, Integer tlfNr,BilutleieSelskap bilutleieselskap) {
+		super();
+		this.adresse = adresse;
+		this.tlfNr = tlfNr;
+		this.bilutleieSelskap=bilutleieselskap;
+		
+	}
+
+	
+	
+    /**
+     * søker etter en bil med en viss kategori og retunerer bil hvis det finne ellers null
+     * @param kategori
+     * @return Bil 
+     */
+    public Bil finnBil(Kategori kategori) {
+    	Bil funnetBil = null;
+        for (Bil bil : biler) {
+            if (bil.getKategori().equals(kategori)&& bil.getStatus()) 
+            	return funnetBil=bil;
+        }
+        return funnetBil;
+    }
+        
+        
+    /**
+     * retunerer en bil med en viss kategori
+     * @param kategori
+     * @return Bil 
+
+     */
+    public Bil hentBil(Kategori kategori) {
+    	Bil funnetBil = finnBil(kategori);
+    	funnetBil=(funnetBil==null)? hentBilfraAnnenKontor(kategori):funnetBil;
+        return funnetBil;
+    }
+
+    /**
+     * låner en bil med en viss kategori fra en annen kontor.
+     * går gjennom en liste med alle utleiekontor og søker etter en bil. fjener bilen fra den andre kontor og legger den til "this"
+     * @param kategori
+     * @return Bil 
+     */
+    public Bil hentBilfraAnnenKontor(Kategori kategori) {//laaner en bil itilfellet "this" har ikke ledige biler
+    	Bil funnetBil = null;
+    	
+    	Iterator<Utleiekontor> alleKontor=bilutleieSelskap.getUtleiekontor().iterator();
+		while (alleKontor.hasNext()&& funnetBil == null) {
+			 Utleiekontor kontor =alleKontor.next();
+			 funnetBil=kontor.finnBil(kategori);
+			if (funnetBil != null){
+				kontor.fjernBil(funnetBil);
+				this.leggTilBil(funnetBil);
+				funnetBil.setUtleiekontor(this);
+			}//if
+		}//while
+    	
+    	return funnetBil;
+    }
+
+
+	/**
+	 * legger en bil til "this" om den ikke finns fra før. 
+	 * @param bil
+	 * @return true om bilen har blitt lagt til ellers false
+	 */
+	public boolean leggTilBil(Bil bil) {
+		boolean b=false;
+		if (biler.indexOf(bil)==-1) 
+			b=biler.add(bil);
+		return b;
+	}
+	
+	/**
+	 * fjerner en bil fra "this" om den finns. 
+	 * @param bil
+	 * @return true om bilen har blitt fjernet ellers false
+	 */
+	public boolean fjernBil(Bil bil) {
+		boolean b=false;
+		if (biler.indexOf(bil)!=-1) 
+			b=biler.remove(bil);
+		return b;
+	}
+	
+	/**
+	 * legger en reservasjon til "this" om den ikke finns fra før.  
+	 * @param reservasjon
+	 * @return true om reservasjonen har blitt lagt til ellers false
+	 */
+	public boolean leggTilReservasjon(Reservasjon reservasjon) {
+		boolean b=false;
+		if (reservasjoner.indexOf(reservasjon)==-1) 
+			b=reservasjoner.add(reservasjon);
+		return b;
+	}
+	
+	/**
+	 * fjerner en reservasjon fra "this" om den finns.  
+	 * @param reservasjon
+	 * @return true om reservasjonen har blitt fjernet ellers false
+	 */
+	public boolean fjernReservasjon(Reservasjon reservasjon) {
+		boolean b=false;
+		if (reservasjoner.indexOf(reservasjon)!=-1) 
+			b=reservasjoner.remove(reservasjon);
+		return b;
+	}
+	
+	/**
+	 * legger en utleie til "this" om den ikke finns fra før.  
+	 * @param utleie
+	 * @return true om utleien har blitt lagt til ellers false
+	 */
+	public boolean leggTilUtleie(Utleie utl) {
+		boolean b=false;
+		if (this.utleie.indexOf(utl)==-1) 
+			b=this.utleie.add(utl);
+		return b;
+	}
+	
+	
+	/**
+	 * fjerner en utleie fra "this" om den finns.  
+	 * @param utleie
+	 * @return true om utleien har blitt fjernet ellers false
+	 */
+	public boolean fjernUtleie(Utleie utl) {
+		boolean b=false;
+		if (utleie.indexOf(utl)!=-1) 
+			b=utleie.remove(utl);
+		return b;
+	}
+
+	/**
+	 * legger en retur til "this" om den ikke finns fra før.  
+	 * @param retur
+	 * @return true om retur har blitt lagt til ellers false
+	 */
+	public boolean leggTilRetur(Retur rtr) {
+		boolean b=false;
+		if (this.retur.indexOf(rtr)==-1) 
+			b=this.retur.add(rtr);
+		return b;
+	}
+	/**
+	 * fjerner en retur fra "this" om den finns.  
+	 * @param retur
+	 * @return true om retur har blitt fjernet ellers false
+	 */
+	public boolean fjernRetur(Retur rtr) {
+		boolean b=false;
+		if (retur.indexOf(rtr)!=-1) 
+			b=retur.remove(rtr);
+		return b;
+	}
+	
+	//litt ekstra ubrukte metoder som kan bruks til søke i lister
+	
+	
+	
+
+	 /**
+	 * retunerer en reservasjon med en viss nr, eller null
+	 * @param resv
+	 * @return reservasjon eller null
+	 */
+	public Reservasjon finnReservasjon(int resv) {
+		 	Reservasjon funnet = null;
+	        for (Reservasjon r : reservasjoner) {
+	            if (r.getResNr().equals(resv)) 
+	            	return funnet=r;
+	        }
+	        return funnet;
+	    }
+	
+	 /**
+	 * retunerer en utleie med en viss nr, eller null
+	 * @param utleie
+	 * @return utleie eller null
+	 */
+	public Utleie finnUtleie(int utl) {
+		 	Utleie funnet = null;
+	        for (Utleie u : utleie) {
+	            if (u.getUtleieNr().equals(utl)) 
+	            	return funnet=u;
+	        }
+	        return funnet;
+	    }
+	 
+	 /**
+	 * retunerer en retur med en viss nr, eller null
+	 * @param retur
+	 * @return retur eller null
+	 */
+	public Retur finnRetur(int rtr) {
+		 Retur funnet = null;
+	        for (Retur r : retur) {
+	            if (r.getReturNr().equals(rtr)) 
+	            	return funnet=r;
+	        }
+	        return funnet;
+	}
+	
+	
+	/**
+	 * henter BilutleieSelskap
+	 * @return BilutleieSelskap
+	 */
+	public BilutleieSelskap getBilutleieSelskap() {
+		return bilutleieSelskap;
+	}
+
+
+	/**
+	 * setter BilutleieSelskap
+	 * @param bilutleieSelskap
+	 */
+	public void setBilutleieSelskap(BilutleieSelskap bilutleieSelskap) {
+		this.bilutleieSelskap = bilutleieSelskap;
+	}
+
+	/**
+	 * henter kontorNr
+	 * @return kontorNr
+	 */
+	public Integer getKontorNr() {
+		return kontorNr;
+	}
+
+	/**
+	 * setter kontorNr
+	 * @param kontorNr
+	 */
+	public void setKontorNr(Integer kontorNr) {
+		this.kontorNr = kontorNr;
+	}
+
+	/**
+	 * henter adresse
+	 * @return adresse
+	 */
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	/**
+	 * setter adresse
+	 * @param adresse
+	 */
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+	/**
+	 * henter tlfNr
+	 * @return tlfNr
+	 */
+	public Integer getTlfNr() {
+		return tlfNr;
+	}
+
+	
+	/**
+	 * setter tlfNr
+	 * @param tlfNr
+	 */
+	public void setTlfNr(Integer tlfNr) {
+		this.tlfNr = tlfNr;
+	}
+
+	/**
+	 * henter biler
+	 * @return biler
+	 */
+	public List<Bil> getBiler() {
+		return biler;
+	}
+
+	/**
+	 * setter biler
+	 * @param biler
+	 */
+	public void setBiler(List<Bil> biler) {
+		this.biler = biler;
+	}
+
+	/**
+	 * henter reservasjoner
+	 * @return reservasjoner
+	 */
+	public List<Reservasjon> getReservasjoner() {
+		return reservasjoner;
+	}
+
+	/**
+	 * setter reservasjoner
+	 * @param reservasjoner
+	 */
+	public void setReservasjoner(List<Reservasjon> reservasjoner) {
+		this.reservasjoner = reservasjoner;
+	}
+
+	/**
+	 * henter utleie
+	 * @return utleie
+	 */
+	public List<Utleie> getUtleie() {
+		return utleie;
+	}
+
+	/**
+	 * setter utleie
+	 * @param utleie
+	 */
+	public void setUtleie(List<Utleie> utleie) {
+		this.utleie = utleie;
+	}
+
+	/**
+	 * henter retur
+	 * @return retur
+	 */
+	public List<Retur> getRetur() {
+		return retur;
+	}
+
+	/**
+	 * setter retur
+	 * @param retur
+	 */
+	public void setRetur(List<Retur> retur) {
+		this.retur = retur;
+	}
+
+	@Override
+	public String toString() {
+		return "Utleiekontor [kontorNr=" + kontorNr + ", adresse=" + adresse + ", tlfNr=" + tlfNr + "]";
+	}
+	
+}

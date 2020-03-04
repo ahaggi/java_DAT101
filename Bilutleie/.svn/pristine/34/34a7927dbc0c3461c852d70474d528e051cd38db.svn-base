@@ -1,0 +1,70 @@
+package no.hib.dat101;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.RollbackException;
+
+public class Database {
+
+	private BilutleieSelskap selskap;
+
+	EntityManagerFactory emf = Persistence.createEntityManagerFactory("eclipselink");
+	EntityManager em = emf.createEntityManager();
+
+	public Database() {
+		selskap = em.find(BilutleieSelskap.class, "Avis");
+	}
+
+	public Database(BilutleieSelskap selskap) {
+		this.selskap = selskap;
+	}
+
+	public Database(String navn) {
+		selskap = em.find(BilutleieSelskap.class, navn);
+	}
+	
+	//Tror vi kun trenger denne metoden for å hente selskapet fra databasen
+	public BilutleieSelskap hentFraDb() {
+		return em.find(BilutleieSelskap.class, "Avis");
+	}
+
+	public void persist() {
+		try {
+			em.getTransaction().begin();
+			em.persist(selskap);
+			em.getTransaction().commit();
+		} catch (RollbackException e) {
+			em.getTransaction().rollback();
+		}
+	}
+	
+	public void persist(Adresse adresse) {
+		try {
+			em.getTransaction().begin();
+			em.persist(adresse);
+			em.getTransaction().commit();
+		} catch (RollbackException e) {
+			em.getTransaction().rollback();
+		}
+	}
+
+	public void close() {
+		em.close();
+		emf.close();
+	}
+
+	public BilutleieSelskap getSelskap() {
+		return selskap;
+	}
+
+	public void setSelskap(BilutleieSelskap selskap) {
+		this.selskap = selskap;
+	}
+
+	@Override
+	public String toString() {
+		return "Database [selskap=" + selskap + "]";
+	}
+
+}

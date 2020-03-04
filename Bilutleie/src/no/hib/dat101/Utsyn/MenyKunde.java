@@ -1,0 +1,57 @@
+package no.hib.dat101.Utsyn;
+
+import java.util.Scanner;
+
+import no.hib.dat101.BilutleieSelskap;
+
+/**
+ * @author Peter Boer, Daniel Moberg og Abdella Haji
+ *
+ */
+public class MenyKunde {
+	
+	Tekstgrensesnitt tg = new Tekstgrensesnitt();
+	Scanner tastatur = new Scanner(System.in);
+	int valg = 0;
+	
+	/**
+	 * Starter menyen til kunden.
+	 */
+	public void start() {
+		do {
+			System.out.println("*************************************");
+			System.out.println("Meny");
+			System.out.println("1. Ny reservasjon");
+			System.out.println("2. Leie ut");
+			System.out.println("3. Returner");
+			
+			System.out.println("9. Exit");
+			System.out.println("*************************************");
+
+			valg = tastatur.nextInt();
+			tastatur.nextLine();
+
+			switch (valg) {
+			case 1:
+				tg.lagNyReservasjon();
+				break;
+			case 2:
+				tg.lagNyUtleie();
+				break;
+			case 3:
+				tg.lagNyRetur();
+				break;
+			default:
+				System.out.println("Lukker meny");
+				break;
+			}
+		} while (valg != 9);
+	}
+	
+	/**
+	 * Lukker kobling til database.
+	 */
+	public void close() {
+		tg.close();
+	}
+}

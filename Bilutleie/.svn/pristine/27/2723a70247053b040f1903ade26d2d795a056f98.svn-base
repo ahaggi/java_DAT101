@@ -1,0 +1,51 @@
+package no.hib.dat101;
+
+public class System2 {
+	
+	private BilutleieSelskap selskap;
+	
+	public System2() {
+		
+	}
+	
+	public System2(BilutleieSelskap selskap) {
+		this.selskap = selskap;
+	}
+
+	public void lagNyKunde(Kunde kunde) {
+		
+	}
+	
+	public void opprettReservasjon(BilutleieSelskap selskap) {
+		
+	}
+	
+	public void visSøkResultat(Kategori kategori) {
+		
+	}
+	
+	public void bekreftReservasjon() {
+		
+	}
+	
+	public void lagNyUtleie(BilutleieSelskap selskap) {
+		
+	}
+	
+	public void lagNyRetur(BilutleieSelskap selskap) {
+		
+	}
+
+	public BilutleieSelskap getSelskap() {
+		return selskap;
+	}
+
+	public void setSelskap(BilutleieSelskap selskap) {
+		this.selskap = selskap;
+	}
+
+	@Override
+	public String toString() {
+		return "System2 [selskap=" + selskap + "]";
+	}
+}

@@ -1,0 +1,158 @@
+package no.hib.dat101;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.*;
+
+public class TestKlient {
+
+	public static void main(String[] args) {
+		
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("eclipselink");
+
+        EntityManager em = emf.createEntityManager();
+        
+              /**************adresse*************/
+//		Adresse adresse = new Adresse("Berge", 5200, "Os");
+//        try {
+//            em.getTransaction().begin();
+//            em.persist(adresse);
+//            em.getTransaction().commit();
+//        } catch (RollbackException e) {
+//            em.getTransaction().rollback();
+//        }
+//		
+//		System.out.println(adresse.toString());
+		
+        
+        /**************selskap*************/
+//        Adresse adresse=em.find(Adresse.class, 1);
+//		BilutleieSelskap selskap = new BilutleieSelskap("Avis1", 99999999, adresse);
+//		
+//		for (Kategori k : selskap.getKategorier()) {
+//			System.out.println(k.getType() + ""+ k.getPris());
+//		}
+//
+//        try {
+//            em.getTransaction().begin();
+//            em.persist(selskap);
+//            em.getTransaction().commit();
+//        } catch (RollbackException e) {
+//            em.getTransaction().rollback();
+//        }
+        
+        /*******************Utleiekontor*************/
+//      Adresse adresse=em.find(Adresse.class, 2);
+//      BilutleieSelskap selskap =em.find(BilutleieSelskap.class, "Avis");
+//      Utleiekontor kontor2 = new Utleiekontor(adresse, 22222222, selskap);
+//		
+//      selskap.getUtleiekontorer().add(kontor2); // endring i obj ==> endering i DB 
+//      try {
+//          em.getTransaction().begin();
+//          em.persist(selskap);//bare selskapet obj
+//          em.getTransaction().commit();
+//      } catch (RollbackException e) {
+//          em.getTransaction().rollback();
+//      }
+		
+        /*******************kategori*************/
+//      Kategori kat=new Kategori('x'); //siden x er ugyldig verdi, vil exception bli kastet
+//      System.out.println(kat.getType());
+//      try {
+//          em.getTransaction().begin();
+//          em.persist(kat);
+//          em.getTransaction().commit();
+//      } catch (RollbackException e) {
+//          em.getTransaction().rollback();
+//      }
+
+        
+        
+        /*******************Bil*************/
+
+//      BilutleieSelskap selskap =em.find(BilutleieSelskap.class, "Avis"); //alltid henter kun selskapet obj, med unntakk av adresse
+//      Utleiekontor kontor = selskap.getUtleiekontorer().get(0);
+//      Kategori kat= selskap.getKategorier().get(1);
+//      
+//      Bil bil = new Bil("AB00003", "merke3", "modell3", "farge3", kat, 00, true, kontor);
+//      kontor.leggTilBil(bil); // endring i obj ==> endering i DB 
+//      
+//      try {
+//          em.getTransaction().begin();
+//          em.persist(selskap);//bare selskapet obj
+//          em.getTransaction().commit();
+//      } catch (RollbackException e) {
+//          em.getTransaction().rollback();
+//      }
+      
+//        /*******************Kunde*************/
+//      BilutleieSelskap selskap =em.find(BilutleieSelskap.class, "Avis"); //alltid henter kun selskapet obj, med unntakk av  adresse
+//      Adresse adresse=em.find(Adresse.class, 2);
+//
+//      Kunde kunde= new Kunde("fornavn4", "etternavn4", adresse, 44444444, selskap);
+//      selskap.leggTilKunde(kunde); // endring i obj ==> endering i DB 
+//      
+//      try {
+//          em.getTransaction().begin();
+//          em.persist(selskap);//bare selskapet obj
+//          em.getTransaction().commit();
+//      } catch (RollbackException e) {
+//          em.getTransaction().rollback();
+//      }
+
+      
+        /********Reservasjon*************/
+        String fra = "15-01-2016";
+        String til = "16-01-2016";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        Date fraDato=null; Date tilDato=null;
+		try {
+			fraDato = dateFormat.parse(fra);
+	        tilDato =dateFormat.parse(til);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
+        
+        BilutleieSelskap selskap =em.find(BilutleieSelskap.class, "Avis"); //alltid henter kun selskapet obj, med unntakk av kategori og adresse
+        Kunde kunde=selskap.getKunder().get(2);
+        Kategori kat= selskap.getKategorier().get(1);
+        Utleiekontor utleieSted=selskap.getUtleiekontor().get(1);
+        Utleiekontor returSted=selskap.getUtleiekontor().get(1);
+        
+        Reservasjon reservasjon= new Reservasjon(kunde, fraDato, tilDato, kat, utleieSted, returSted); //må skrive en metode beregnetPris
+        utleieSted.leggTilReservasjon(reservasjon); // endring i obj ==> endering i DB 
+        kunde.leggTilReservasjon(reservasjon);// endring i obj ==> endering i DB
+
+        try {
+            em.getTransaction().begin();
+            em.persist(selskap);//bare selskapet obj
+            em.getTransaction().commit();
+        } catch (RollbackException e) {
+            em.getTransaction().rollback();
+        }
+
+        
+        
+        
+        
+//		Adresse adresse2 = em.find(Adresse.class, 9);
+//		
+//		System.out.println(adresse2.toString());
+//		
+//		BilutleieSelskap selskap = em.find(BilutleieSelskap.class, "Bilutleie Selskap");
+//		
+//		Bil bil = em.find(Bil.class, "EXS001");
+//		
+		//System.out.println(bil.toString());
+//		
+		em.close();
+		emf.close();
+
+	}
+
+}

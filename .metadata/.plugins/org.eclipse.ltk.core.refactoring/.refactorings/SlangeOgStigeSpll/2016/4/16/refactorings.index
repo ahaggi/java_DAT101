@@ -1,0 +1,15 @@
+1461070036132	Rename type 'brikke'
+1461070098235	Rename type 'Spillet'
+1461075579635	Rename local variable 'rute'
+1461077634514	Rename local variable 'AntallSetg'
+1461240044444	Delete elements
+1461245665904	Rename type 'Tur'
+1461363668790	Rename local variable 'res'
+1461363694472	Rename local variable 'kast'
+1461367813799	Rename local variable 'nyRuteNDX'
+1461367829200	Rename local variable 'nyRute'
+1461367842886	Rename local variable 'forrigeRute'
+1461416698769	Rename method 'lagRuter'
+1461416712296	Rename method 'setRuterPosisjon'
+1461417715729	Rename type 'FiveMagicBox'
+1461422795379	Delete element

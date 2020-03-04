@@ -1,0 +1,30 @@
+package no.hib.dat101;
+
+public class Kategori {
+
+	private Character kategori;
+	private Double beregnetPris;
+	private final Double prisA = 1000.0;
+	private final Double prisB = 2000.0;
+	private final Double prisC = 3000.0;
+	private final Double prisD = 4000.0;
+	
+	//prisA/prisB/prisC/prisD heter "type" i databasen
+	
+	public Kategori() {
+		
+	}
+	
+	public Double beregnPris(int antallDager, Character kategori) {
+		if (kategori == 'A') {
+			beregnetPris = prisA * antallDager;
+		} else if (kategori == 'B') {
+			beregnetPris = prisB * antallDager;
+		} else if (kategori == 'C') {
+			beregnetPris = prisC * antallDager;
+		} else if (kategori == 'D') {
+			beregnetPris = prisD * antallDager;
+		}
+		return beregnetPris;
+	}
+}

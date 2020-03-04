@@ -1,0 +1,52 @@
+package no.hib.dat101.craps;
+
+/**
+ * Terningsspllet fra læreboken.
+ * 
+ * @author Atle Geitung
+ */
+public class TerningSpill {
+
+    private Terning terning1;
+    private Terning terning2;
+    private boolean seier;
+
+    /**
+     * Initierer et nytt terningspill.
+     */
+    public TerningSpill() {
+        terning1 = new Terning();
+        terning2 = new Terning();
+    }
+
+    /**
+     * Spiller spillet.
+     */
+    public final void spill() {
+        terning1.trill();
+        int verdi1 = terning1.getVerdi();
+        terning2.trill();
+        int verdi2 = terning2.getVerdi();
+        seier = (verdi1 + verdi2) == 7;
+
+        vis();
+    }
+
+    /**
+     * Viser resultatet.
+     */
+    private void vis() {
+        System.out.println("Terningene viser: " + terning1.getVerdi() + " " + terning2.getVerdi());
+        System.out.println( (seier ? "Jeg vant" : "Jeg tapte"));
+    }
+
+    /**
+     * Tilsvarer spilleren i eksempelert.
+     * 
+     * @param args ikke i bruk
+     */
+    public static void main(final String[] args) {
+        new TerningSpill().spill();
+    }
+
+}

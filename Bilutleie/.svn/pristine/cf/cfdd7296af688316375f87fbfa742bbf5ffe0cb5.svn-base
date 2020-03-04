@@ -1,0 +1,96 @@
+package no.hib.dat101;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.RollbackException;
+
+public class TestMeny {
+
+	public static void main(String[] args) {
+
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("eclipselink");
+		EntityManager em = emf.createEntityManager();
+		Scanner tastatur = new Scanner(System.in);
+		int valg = 0;
+		Utleiekontor utleiekontor = new Utleiekontor();
+		Bil bil = new Bil();
+
+		System.out.println("*************************************");
+		System.out.println("Navn på selskap:");
+		String navnSelskap = tastatur.nextLine();
+		BilutleieSelskap selskap = em.find(BilutleieSelskap.class, navnSelskap);
+
+		do {
+			System.out.println("*************************************");
+			System.out.println("Meny");
+			System.out.println("1. Info selskap");
+			System.out.println("2. Utleiekontorer i selskap");
+			System.out.println("3. Biler i et bestemt utleiekontor");
+			System.out.println("4. Ledige biler i et bestemt utleiekontor");
+			System.out.println("9. Exit");
+			System.out.println("*************************************");
+
+			valg = tastatur.nextInt();
+			tastatur.nextLine();
+
+			switch (valg) {
+			case 1:
+				System.out.println(selskap.toString());
+				break;
+			case 2:
+				List<Utleiekontor> utleiekontorer = selskap.getUtleiekontor();
+				for (int i = 0; i < utleiekontorer.size(); i++) {
+					Utleiekontor kontor = utleiekontorer.get(i);
+					System.out.println(kontor.toString());
+				}
+				break;
+			case 3:
+				System.out.println("Velg kontor:");
+				int valgKontor = tastatur.nextInt();
+				tastatur.nextLine();
+				List<Bil> biler = selskap.getUtleiekontor().get(valgKontor).getBiler();
+				for (int i = 0; i < biler.size(); i++) {
+					Bil bil1 = biler.get(i);
+					System.out.println(bil1.toString());
+				}
+				//Kategori kat= selskap.getKategorier().get(0);
+				//Bil bil1 = new Bil("AB00003", "merke3", "modell3", "farge3", kat, 00, false, selskap.getUtleiekontor().get(valgKontor));
+				//selskap.getUtleiekontor().get(valgKontor).leggTilBil(bil1); // endring i obj ==> endering i DB
+				break;
+			case 4:
+				System.out.println("Velg kontor:");
+				valgKontor = tastatur.nextInt();
+				tastatur.nextLine();
+				biler = selskap.getUtleiekontor().get(valgKontor).getBiler();
+				for (int i = 0; i < biler.size(); i++) {
+					Bil bil1 = biler.get(i);
+					if (bil1.getStatus() == true) {
+						System.out.println(bil1.toString());
+					}
+				}
+				break;
+			default:
+				System.out.println("kos!");
+				break;
+			}
+		} while (valg != 9);
+		
+        try {
+        	em.getTransaction().begin();
+        	em.persist(selskap);
+        	em.getTransaction().commit();
+        } catch (RollbackException e) {
+        	em.getTransaction().rollback();
+        }
+        
+		tastatur.close();
+		em.close();
+		emf.close();
+	}
+
+}

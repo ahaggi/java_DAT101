@@ -1,0 +1,48 @@
+package no.hib.dat101;
+
+import java.util.Scanner;
+
+public class MenyKunde {
+	
+	Tekstgrensesnitt tg = new Tekstgrensesnitt();
+	Database db = new Database();
+	BilutleieSelskap selskap = db.hentFraDb();
+	Scanner tastatur = new Scanner(System.in);
+	int valg = 0;
+	
+	public void start() {
+		do {
+			System.out.println("*************************************");
+			System.out.println("Meny");
+			System.out.println("1. Ny reservasjon");
+			System.out.println("2. Leie ut");
+			System.out.println("3. Returner");
+			
+			System.out.println("9. Exit");
+			System.out.println("*************************************");
+
+			valg = tastatur.nextInt();
+			tastatur.nextLine();
+
+			switch (valg) {
+			case 1:
+				tg.søkLedigBil();
+				break;
+			case 2:
+				tg.lagNyUtleie(selskap.getUtleiekontor().get(tastatur.nextInt()).finnReservasjon(tastatur.nextInt()));
+				break;
+			case 3:
+				//tg.lagNyRetur(utl);
+				break;
+			default:
+				System.out.println("Lukker meny");
+				break;
+			}
+		} while (valg != 9);
+	}
+	
+	public void close() {
+		tg.close();
+		db.close();
+	}
+}

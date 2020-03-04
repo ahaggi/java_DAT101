@@ -1,0 +1,111 @@
+package no.hib.dat101;
+
+import javax.persistence.*;
+
+@Entity
+@Table(schema="bilutleie_test", name="bil")
+
+public class Bil {
+    @Id
+	private String regNr;
+	private String merke;
+	private String modell;
+	private String farge;
+	@OneToOne
+    @JoinColumn(name="kategori", referencedColumnName="type")
+	private Kategori kategori;
+	private Integer kmStand;
+	private Boolean status;
+    @ManyToOne
+    @JoinColumn(name="utleiekontor", referencedColumnName="kontornr",insertable=true, updatable=true)
+	private Utleiekontor utleiekontor;
+	
+	//default constructor til bil
+	public Bil(){
+
+	}
+
+	public Bil(String regNr, String merke, String modell, String farge, Kategori kategori, Integer kmStand,
+			Boolean status, Utleiekontor utleiekontor) {
+		this.regNr = regNr;
+		this.merke = merke;
+		this.modell = modell;
+		this.farge = farge;
+		this.kategori = kategori;
+		this.kmStand = kmStand;
+		this.status = status;
+		this.utleiekontor = utleiekontor;
+	}
+
+	public String getregNr() {
+		return regNr;
+	}
+
+	public void setregNr(String regNr) {
+		this.regNr = regNr;
+	}
+
+	public String getMerke() {
+		return merke;
+	}
+
+	public void setMerke(String merke) {
+		this.merke = merke;
+	}
+
+	public String getModell() {
+		return modell;
+	}
+
+	public void setModell(String modell) {
+		this.modell = modell;
+	}
+
+	public String getFarge() {
+		return farge;
+	}
+
+	public void setFarge(String farge) {
+		this.farge = farge;
+	}
+
+	public Integer getkmStand() {
+		return kmStand;
+	}
+
+	public void setkmStand(Integer kmStand) {
+		this.kmStand = kmStand;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
+	public Kategori getKategori() {
+		return kategori;
+	}
+
+	public void setKategori(Kategori kategori) {
+		this.kategori = kategori;
+	}
+
+	public Utleiekontor getUtleiekontor() {
+		return utleiekontor;
+	}
+
+	public void setUtleiekontor(Utleiekontor utleiekontor) {
+		this.utleiekontor = utleiekontor;
+	}
+
+	@Override
+	public String toString() {
+		return "Bil [regNr=" + regNr + ", merke=" + merke + ", modell=" + modell + ", farge=" + farge + ", kategori="
+				+ kategori + ", kmStand=" + kmStand + ", status=" + status + ", utleiekontor=" + utleiekontor + "]";
+	}
+	
+	
+}

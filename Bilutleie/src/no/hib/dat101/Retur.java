@@ -1,0 +1,283 @@
+package no.hib.dat101;
+
+import java.util.*;
+
+import javax.persistence.*;
+
+/**
+ * @author Peter Boer, Daniel Moberg og Abdella Haji 
+ *
+ */
+@Entity
+@Table(schema = "bilutleie")
+public class Retur {
+	@Id
+	private Integer returNr;
+
+	@OneToOne
+	@JoinColumn(name = "utleienr", referencedColumnName = "utleienr")
+	private Utleie utleieNr;
+
+	@ManyToOne
+	@JoinColumn(name = "kunde", referencedColumnName = "kundenr", insertable = true, updatable = true)
+	private Kunde kunde;
+
+	@OneToOne
+	@JoinColumn(name = "bil", referencedColumnName = "regnr")
+	private Bil bil;
+	private Integer kmStand;
+
+	@ManyToOne
+	@JoinColumn(name = "retursted", referencedColumnName = "kontornr", insertable = true, updatable = true)
+	private Utleiekontor returSted;
+	private Date fraDato;
+	private Date tilDato;
+	private Integer kredittKort;
+	private Double pris;
+	private Double betaltBelop;
+
+	/**
+	 * Lager ny retur.
+	 */
+	public Retur() {
+
+	}
+
+	/**
+	 * Lager ny retur.
+	 * 
+	 * @param utleieNr
+	 * @param kmStand
+	 * @param returSted
+	 * @param tilDato
+	 * @param betaltBelop
+	 */
+	public Retur(Utleie utleieNr, Integer kmStand, Utleiekontor returSted, Date tilDato, double betaltBelop) {
+		
+		this.returNr = utleieNr.getUtleieNr();
+		this.utleieNr = utleieNr;
+		this.kunde = utleieNr.getKunde();
+		this.bil = utleieNr.getBil();
+		this.kmStand = kmStand;
+		this.returSted = returSted;
+		this.fraDato = utleieNr.getFraDato();
+		this.tilDato = tilDato;
+		int antallDager = (int) (tilDato.getDate() - fraDato.getDate());
+		this.kredittKort = utleieNr.getKredittKort();
+		this.pris = bil.getKategori().beregnetPris(antallDager);
+		double betaltBelopVedUtleie = utleieNr.getBetaltBelop();
+		this.betaltBelop = betaltBelopVedUtleie + betaltBelop;
+		levereBil();//TODO 
+	}
+
+	/**
+	 * Levere bil
+	 * 
+	 * @return om bilen er levert eller ikke.
+	 */
+	public boolean levereBil() {
+		boolean levert = false;
+		if (utleieNr.getUtleieSted().fjernBil(bil)) {
+			returSted.leggTilBil(bil);
+			bil.setUtleiekontor(this.getReturSted());
+			bil.setStatus(true);
+		}
+		return levert;
+	}
+
+	/**
+	 * Henter returNr.
+	 * 
+	 * @return returNr
+	 */
+	public Integer getReturNr() {
+		return returNr;
+	}
+
+	/**
+	 * Henter utleieNr.
+	 * 
+	 * @return utleieNr
+	 */
+	public Utleie getutleieNr() {
+		return utleieNr;
+	}
+
+	/**
+	 * Setter utleieNr.
+	 * 
+	 * @param utlNr utleieNr
+	 */
+	public void setutleieNr(Utleie utlNr) {
+		this.utleieNr = utlNr;
+	}
+
+	/**
+	 * Henter kunde.
+	 * 
+	 * @return kunde
+	 */
+	public Kunde getKunde() {
+		return kunde;
+	}
+
+	/**
+	 * Setter kunde.
+	 * 
+	 * @param kunde kunde
+	 */
+	public void setKunde(Kunde kunde) {
+		this.kunde = kunde;
+	}
+
+	/**
+	 * Henter bil
+	 * 
+	 * @return bil
+	 */
+	public Bil getBil() {
+		return bil;
+	}
+
+	/**
+	 * Setter bil.
+	 * 
+	 * @param bil bil
+	 */
+	public void setBil(Bil bil) {
+		this.bil = bil;
+	}
+
+	/**
+	 * Henter kmStand.
+	 * 
+	 * @return kmStand
+	 */
+	public Integer getKmStand() {
+		return kmStand;
+	}
+
+	/**
+	 * Setter kmStand
+	 * 
+	 * @param kmStand kmStand
+	 */
+	public void setKmStand(Integer kmStand) {
+		this.kmStand = kmStand;
+	}
+
+	/**
+	 * Henter returSted.
+	 * 
+	 * @return returSted
+	 */
+	public Utleiekontor getReturSted() {
+		return returSted;
+	}
+
+	/**
+	 * Setter returSted.
+	 * 
+	 * @param returSted returSted
+	 */
+	public void setReturSted(Utleiekontor returSted) {
+		this.returSted = returSted;
+	}
+
+	/**
+	 * Henter fraDato.
+	 * 
+	 * @return fraDato
+	 */
+	public Date getFraDato() {
+		return fraDato;
+	}
+
+	/**
+	 * Setter fraDato.
+	 * 
+	 * @param fraDato fraDato
+	 */
+	public void setFraDato(Date fraDato) {
+		this.fraDato = fraDato;
+	}
+
+	/**
+	 * Henter tilDato.
+	 * 
+	 * @return tilDato
+	 */
+	public Date getTilDato() {
+		return tilDato;
+	}
+
+	/**
+	 * Setter tilDato.
+	 * 
+	 * @param tilDato tilDato
+	 */
+	public void setTilDato(Date tilDato) {
+		this.tilDato = tilDato;
+	}
+
+	/**
+	 * Henter kredittKort.
+	 * 
+	 * @return kredittKort
+	 */
+	public Integer getKredittKort() {
+		return kredittKort;
+	}
+
+	/**
+	 * Setter kredittKort.
+	 * 
+	 * @param kredittKort kredittKort
+	 */
+	public void setKredittKort(Integer kredittKort) {
+		this.kredittKort = kredittKort;
+	}
+
+	/**
+	 * Henter pris.
+	 * 
+	 * @return pris
+	 */
+	public Double getPris() {
+		return pris;
+	}
+
+	/**
+	 * Setter pris.
+	 * 
+	 * @param pris pris
+	 */
+	public void setPris(Double pris) {
+		this.pris = pris;
+	}
+
+	/**
+	 * Henter betaltBelop.
+	 * 
+	 * @return betaltBelop
+	 */
+	public Double getBetaltBelop() {
+		return betaltBelop;
+	}
+
+	/**
+	 * Setter betaltBelop
+	 * 
+	 * @param betaltBelop betaltBelop
+	 */
+	public void setBetaltBelop(Double betaltBelop) {
+		this.betaltBelop = betaltBelop;
+	}
+
+	@Override
+	public String toString() {
+		return "Retur [returNr=" + returNr + ", utleie=" + utleieNr + ", kunde=" + kunde + ", bil=" + bil + ", kmStand="
+				+ kmStand + ", returSted=" + returSted + ", fraDato=" + fraDato + ", tilDato=" + tilDato
+				+ ", kredittKort=" + kredittKort + ", pris=" + pris + ", betaltBelop=" + betaltBelop + "]";
+	}
+}

@@ -1,0 +1,28 @@
+package no.hib.dat101;
+
+import java.util.Date;
+
+public class Reservasjon {
+	
+	private Integer reservasjonNr;
+	private Utleiekontor utleieSted;
+	private Utleiekontor returSted;
+	private Date fraDato;
+	private Date tilDato;
+	private double antallDager;
+	private Kategori kategori;
+	private Double pris;
+	private Kunde kunde;
+	
+	public Reservasjon() {
+		
+	}
+	
+	public void beregnPris() {
+		
+	}
+	
+	public void visSøkResultat(Kategori kategori) {
+		
+	}
+}

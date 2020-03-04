@@ -1,0 +1,53 @@
+package no.hib.dat101;
+
+import javax.persistence.*;
+
+public class TestKlient {
+
+	public static void main(String[] args) {
+		
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("eclipselink");
+
+        EntityManager em = emf.createEntityManager();
+        
+              /**************adresse*************/
+//		Adresse adresse = new Adresse("Berge", 5200, "Os");
+//        try {
+//            em.getTransaction().begin();
+//            em.persist(adresse);
+//            em.getTransaction().commit();
+//        } catch (RollbackException e) {
+//            em.getTransaction().rollback();
+//        }
+//		
+//		System.out.println(adresse.toString());
+		
+        
+        /**************selskap*************/
+//        Adresse adresse=em.find(Adresse.class, 1);
+//		BilutleieSelskap selskap = new BilutleieSelskap("Avis1", 99999999, adresse);
+//		
+//        try {
+//            em.getTransaction().begin();
+//            em.persist(selskap);
+//            em.getTransaction().commit();
+//        } catch (RollbackException e) {
+//            em.getTransaction().rollback();
+//        }
+		
+		Adresse adresse2 = em.find(Adresse.class, 9);
+		
+		System.out.println(adresse2.toString());
+		
+		BilutleieSelskap selskap = em.find(BilutleieSelskap.class, "Bilutleie Selskap");
+		
+//		Bil bil = em.find(Bil.class, "EXS001");
+		
+		//System.out.println(bil.toString());
+		
+		em.close();
+		emf.close();
+
+	}
+
+}

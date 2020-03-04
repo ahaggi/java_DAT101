@@ -1,0 +1,129 @@
+package no.hib.dat101;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Kunde {
+	
+	private Integer kundeNr;
+	private String fornavn;
+	private String etternavn;
+	private Adresse adresse;
+	private Integer tlfNr;
+	private String bilutleieSelskap;
+	private List<Reservasjon> reservasjon = new ArrayList<Reservasjon>();
+	private List<Utleie> utleie = new ArrayList<Utleie>();
+	private List<Retur> retur = new ArrayList<Retur>();
+	
+	//constructor for vilkårlig kunde
+	public Kunde() {
+
+	}
+	
+	//konstruktør til kunde
+	public Kunde(Integer kundeNr, String fornavn, String etternavn, Adresse adresse, Integer tlfNr,
+			String bilutleieSelskap) {
+		this.kundeNr = kundeNr;
+		this.fornavn = fornavn;
+		this.etternavn = etternavn;
+		this.adresse = adresse;
+		this.tlfNr = tlfNr;
+		this.bilutleieSelskap = bilutleieSelskap;
+	}
+	
+	public void leggTilReservasjon(Reservasjon reservasjon) {
+		
+	}
+
+	public void fjernReservasjon(Reservasjon reservasjon) {
+		
+	}
+	
+	public void leggTilUtleie(Utleie utleie) {
+		
+	}
+	
+	public void leggTilRetur(Retur retur) {
+		
+	}
+
+	public Integer getKundeNr() {
+		return kundeNr;
+	}
+
+	public void setKundeNr(Integer kundeNr) {
+		this.kundeNr = kundeNr;
+	}
+
+	public String getFornavn() {
+		return fornavn;
+	}
+
+	public void setFornavn(String fornavn) {
+		this.fornavn = fornavn;
+	}
+
+	public String getEtternavn() {
+		return etternavn;
+	}
+
+	public void setEtternavn(String etternavn) {
+		this.etternavn = etternavn;
+	}
+
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+	public Integer getTlfNr() {
+		return tlfNr;
+	}
+
+	public void setTlfNr(Integer tlfNr) {
+		this.tlfNr = tlfNr;
+	}
+
+	public String getBilutleieSelskap() {
+		return bilutleieSelskap;
+	}
+
+	public void setBilutleieSelskap(String bilutleieSelskap) {
+		this.bilutleieSelskap = bilutleieSelskap;
+	}
+
+	public List<Reservasjon> getReservasjon() {
+		return reservasjon;
+	}
+
+	public void setReservasjon(List<Reservasjon> reservasjon) {
+		this.reservasjon = reservasjon;
+	}
+
+	public List<Utleie> getUtleie() {
+		return utleie;
+	}
+
+	public void setUtleie(List<Utleie> utleie) {
+		this.utleie = utleie;
+	}
+
+	public List<Retur> getRetur() {
+		return retur;
+	}
+
+	public void setRetur(List<Retur> retur) {
+		this.retur = retur;
+	}
+
+	@Override
+	public String toString() {
+		return "Kunde [kundeNr=" + kundeNr + ", fornavn=" + fornavn + ", etternavn=" + etternavn + ", adresse="
+				+ adresse + ", tlfNr=" + tlfNr + ", bilutleieSelskap=" + bilutleieSelskap + "]";
+	}
+	
+	
+}

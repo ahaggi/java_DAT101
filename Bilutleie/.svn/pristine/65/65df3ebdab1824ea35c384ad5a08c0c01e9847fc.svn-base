@@ -1,0 +1,40 @@
+package no.hib.dat101;
+
+public class Utleiekontor {
+	
+	private Integer kontorNr;
+	private Adresse adresse;
+	private Integer tlfNr;
+	private Bil[] biler;
+	private Reservasjon[] reservasjoner;
+	private Utleie[] utleie;
+	private Retur[] retur;
+	
+	public Utleiekontor() {
+		
+	}
+	
+	public void leggTilBil(Bil bil) {
+		
+	}
+	
+	public void fjernBil(Bil bil) {
+		
+	}
+	
+	public void leggTilReservasjon(Reservasjon reservasjon) {
+		
+	}
+	
+	public void fjernReservasjon(Reservasjon reservasjon) {
+		
+	}
+	
+	public void leggTilUtleie(Utleie utleie) {
+		
+	}
+	
+	public void leggTilRetur(Retur retur) {
+		
+	}
+}

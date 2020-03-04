@@ -1,0 +1,49 @@
+package no.hib.dat101;
+
+import javax.persistence.*;
+
+@Entity
+@Table(schema="bilutleie_test")
+
+public class Kategori {
+	@Id
+	private Character type;
+	private Double pris;
+	
+	//prisA/prisB/prisC/prisD heter "pris" i databasen
+	
+	public Kategori() {
+		
+	}
+
+	public Kategori(Character type, Double pris) {
+		this.type = type;
+		this.pris = pris;
+	}
+
+
+
+	public Character getType() {
+		return type;
+	}
+
+	public void setType(Character type) {
+		this.type = type;
+	}
+
+	public Double getPris() {
+		return pris;
+	}
+
+	public void setPris(Double pris) {
+		this.pris = pris;
+	}
+
+	@Override
+	public String toString() {
+		return "Kategori [type=" + type + ", pris=" + pris + "]";
+	}
+	
+	
+	
+}

@@ -1,0 +1,99 @@
+package no.hib.dat101;
+
+import java.util.*;
+
+import javax.persistence.*;
+
+@Entity
+@Table(schema="bilutleie_test")
+public class BilutleieSelskap {
+	
+	@Id
+	private String navn;
+	private Integer tlfNr;
+	@OneToOne
+	@JoinColumn(name="firmaadresse", referencedColumnName="id")
+	private Adresse adresse;
+	
+    @OneToMany(mappedBy="BilutleieSelskap", cascade=CascadeType.ALL)
+	private List<Utleiekontor> utleiekontorer = new ArrayList<Utleiekontor>();
+    
+    @OneToMany(mappedBy="BilutleieSelskap", cascade=CascadeType.ALL)
+	private List<Kunde> kunder = new ArrayList<Kunde>();
+	
+	public BilutleieSelskap() {
+		
+	}
+	
+	public BilutleieSelskap(String navn, Integer tlfNr, Adresse adresse) {
+		this.navn = navn;
+		this.tlfNr = tlfNr;
+		this.adresse = adresse;
+	}
+	
+	//trenger en metode som henter Selskap fra database.
+	
+	public void leggTilKunde(Kunde kunde) {
+		kunder.add(kunde);
+	}
+	
+	public void fjernKunde(Kunde kunde) {
+		kunder.remove(kunde);
+	}
+	
+	public void leggTilUtleiekontor(Utleiekontor utleiekontor) {
+		utleiekontorer.add(utleiekontor);
+	}
+	
+	public void fjernUtleiekontor(Utleiekontor utleiekontor) {
+		utleiekontorer.remove(utleiekontor);
+	}
+
+	public String getNavn() {
+		return navn;
+	}
+
+	public void setNavn(String navn) {
+		this.navn = navn;
+	}
+
+	public Integer getTlfNr() {
+		return tlfNr;
+	}
+
+	public void setTlfNr(Integer tlfNr) {
+		this.tlfNr = tlfNr;
+	}
+
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+	public List<Utleiekontor> getUtleiekontorer() {
+		return utleiekontorer;
+	}
+
+	public void setUtleiekontorer(List<Utleiekontor> utleiekontorer) {
+		this.utleiekontorer = utleiekontorer;
+	}
+
+	public List<Kunde> getKunder() {
+		return kunder;
+	}
+
+	public void setKunder(List<Kunde> kunder) {
+		this.kunder = kunder;
+	}
+
+	@Override
+	public String toString() {
+		return "BilutleieSelskap [navn=" + navn + ", tlfNr=" + tlfNr + ", adresse=" + adresse + "]";
+	}
+	
+	
+
+}

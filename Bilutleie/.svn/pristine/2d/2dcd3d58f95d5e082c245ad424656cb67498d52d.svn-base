@@ -1,0 +1,32 @@
+package no.hib.dat101;
+
+import java.util.Date;
+
+public class Retur {
+	
+	private Integer returNr;
+	private Reservasjon resNr;
+	private Kunde kunde;
+	private Bil bil;
+	private Integer kmStand;
+	private Utleiekontor returSted;
+	private Date fraDato;
+	private Date tilDato;
+	private Integer kredittKort;
+	private Double pris;
+	private Double betaltBelop;
+	private Utleie utleie;
+	
+	public Retur() {
+		
+	}
+	
+	public void oppdaterPris() {
+		
+	}
+	
+	public void levereBil() {
+		
+	}
+	
+}

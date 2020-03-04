@@ -1,0 +1,289 @@
+package no.hib.dat101.utsyn;
+
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.*;
+import no.hib.dat101.*;
+import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+
+public class StigeOgSlange extends JFrame {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8676592650951494887L;
+	private JPanel contentPane;
+	private static JLabel[][] lbl;
+
+	private JTextField textField;
+	static JLabel lblNewLabel;
+	static JLabel lblBrikker[];
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+
+					StigeOgSlange frame = new StigeOgSlange();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public StigeOgSlange() {
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 439, 554);
+		contentPane = new JPanel();
+		contentPane.setBackground(new Color(204, 0, 0));
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+
+		
+		
+		
+		JButton btnNewButton = new JButton("Start");
+		btnNewButton.addActionListener(enter);
+		btnNewButton.setBounds(324, 439, 89, 23);
+		contentPane.add(btnNewButton);
+
+		textField = new JTextField();
+		textField.addActionListener(enter);
+		textField.setBounds(37, 440, 86, 20);
+		contentPane.add(textField);
+		textField.setColumns(10);
+
+		lblNewLabel = new JLabel("tast inn antall spillere (fom 2 tom 4)");
+		lblNewLabel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(37, 484, 376, 20);
+		lblNewLabel.setOpaque(true);
+		contentPane.add(lblNewLabel);
+
+		lbl = new JLabel[10][10];
+		lblBrikker = new JLabel[4];
+		lagBrikker_Label();
+
+		lagRuter_Label();
+		setRuter_LabelPosisjon();
+		
+		JLabel thumb = new JLabel();
+		
+		thumb.setIcon(new ImageIcon(new ImageIcon("Untitled.png").getImage().getScaledInstance(400, 400, Image.SCALE_DEFAULT)));
+		thumb.setBounds(10, 11, 400, 400);
+
+		contentPane.add(thumb);
+		
+		
+		
+		
+		
+		
+
+	}
+
+	private void lagRuter_Label() {
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j <= 9; j++) {
+				lbl[i][j] = new JLabel(((10 * i) + j + 1) + "");
+				lbl[i][j].setBorder(new LineBorder(new Color(0, 0, 0)));
+				lbl[i][j].setHorizontalAlignment(SwingConstants.CENTER);
+				lbl[i][j].setOpaque(false);
+				contentPane.add(lbl[i][j]);
+			}
+		}
+
+	}
+
+	private void setRuter_LabelPosisjon() {
+		for (int i = 0; i <= 9; i++) {
+
+			if (i % 2 == 0) {
+				for (int j = 0; j <= 9; j++) {
+					lbl[i][j].setBounds(10 + (j * 40), 11 + ((9 - i) * 40), 40, 40);
+				}
+			} else {
+				for (int j = 9; j >= 0; j--) {
+					lbl[i][j].setBounds(10 + ((9 - j) * 40), 11 + ((9 - i) * 40), 40, 40);
+				}
+			}
+		} // for
+	}
+
+	private void setRuter_Label() {
+		ArrayList<Rute> ruter = (ArrayList<Rute>) spill.getBrett().getRuter();
+
+		for (int i = 0; i < 10; i++) {
+			for (int j = 0; j < 10; j++) {
+				lbl[i][j].setText(ruter.get(10 * i + j).getRuteId() + "");
+			}
+		}
+	}
+
+	private void lagBrikker_Label() {
+		for (int i = 0; i < 4; i++) {
+			lblBrikker[i] = new JLabel();
+			lblBrikker[i].setBorder(new LineBorder(new Color(0, 0, 0)));
+			lblBrikker[i].setHorizontalAlignment(SwingConstants.CENTER);
+			lblBrikker[i].setBackground(Color.WHITE);
+			lblBrikker[i].setOpaque(true);
+			lblBrikker[i].setBounds(10, 11 + ((9) * 40), 20, 20);// setter alle
+																	// brikker
+																	// på 1.
+																	// rute-posisjon
+			contentPane.add(lblBrikker[i]);
+
+		}
+	}
+	
+	
+
+
+	private void setBrikker_LabelPosisjon() {
+		int i = 0;
+		while (i < 4) { //nullstiller resten ubrukte brikker
+			setLocation(lblBrikker[i], i, 10, 11 + ((9) * 40));
+			i++;
+		}
+
+	}
+
+	private void setLocation(JLabel lbl,int i, int x , int y) {
+
+		switch (i) {
+		case 0:
+			lbl.setLocation(x, y);
+			break;
+		case 1:
+			lbl.setLocation(x+20, y);
+			break;
+		case 2:
+			lbl.setLocation(x, y+20);
+			break;
+		case 3:
+			lbl.setLocation(x+20, y+20);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	private static void getRiktigLocation(JLabel lbl,int i) {
+		Point p=null;
+		switch (i) {
+		case 0:
+			p=lbl.getLocation();
+			p.setLocation(p.getX(), p.getY());
+			lbl.setLocation(p);
+			break;
+		case 1:
+			p=lbl.getLocation();
+			p.setLocation(p.getX()-20, p.getY());
+			lbl.setLocation(p);			
+			break;
+		case 2:
+			p=lbl.getLocation();
+			p.setLocation(p.getX(), p.getY()-20);
+			lbl.setLocation(p);
+			break;
+		case 3:
+			p=lbl.getLocation();
+			p.setLocation(p.getX()-20, p.getY()-20);
+			lbl.setLocation(p);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	
+	public static void oppdater_komponenter(Logg l) {
+		logg=l;
+		int fraPos = logg.getFraRute().getRuteId() - 1; // legg merke til -1
+		int x = fraPos / 10;
+		int y = fraPos % 10;
+		
+		JLabel brikke=null;
+		int i=0;
+		for (JLabel b : lblBrikker ) {
+			getRiktigLocation(b, i);
+			if (b.getLocation().equals(lbl[x][y].getLocation())) 
+				brikke=b;
+			i++;
+		}
+		int tilPos = logg.getTilRute().getRuteId() - 1; // legg merke til -1
+		 x = tilPos / 10;
+		 y = tilPos % 10;
+
+		brikke.setLocation(lbl[x][y].getLocation());
+		lblNewLabel.setText(logg.getHandling());
+
+		
+	}
+	
+	
+	
+	
+	
+//	public static void sleep(Action name, int miliseconds){
+//		Timer timer = new Timer(miliseconds, name);
+//		timer.setInitialDelay(miliseconds);
+//		timer.setDelay(miliseconds);
+//		timer.setRepeats(false);
+//		timer.start();
+//	}
+//	
+//	private static Action tull = new AbstractAction() {
+//		private static final long serialVersionUID = 7892201122490351698L;
+//		@Override
+//		public void actionPerformed(ActionEvent arg0) {
+//
+//		}
+//	};
+
+	
+	
+	
+	
+	private Spill spill;
+	private static Logg logg;
+	Action enter = new AbstractAction() {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -1659365131717518851L;
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			try {
+				int antallspillere = Integer.valueOf(textField.getText());
+				spill = new Spill(antallspillere);
+				setRuter_Label();
+				setBrikker_LabelPosisjon();
+
+
+				spill.startSpill();
+
+				textField.setText("");
+			} catch (NumberFormatException e2) {
+				JOptionPane.showMessageDialog(null, "Ulovlig input: " + e2.getMessage());
+				textField.setText("");
+			}
+
+		}
+	};
+
+}

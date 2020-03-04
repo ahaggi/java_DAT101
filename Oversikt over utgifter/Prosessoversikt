@@ -1,0 +1,40 @@
+Først har vi beskrivelsen, eller kanskje bare en muntlig ide.
+
+OOA:
+Kap6
+Det neste er å identifisere og formulere brukstilfellene (tekst). Dette er kravene!
+Sentralt her er scenarier som beskriver samhandling mellom bruker og system.
+Kan slenge på et use-case-diagram for oversikten sin del.
+Kap9
+Deretter er det domenemodellen sin tur. Denne lages på grunnlag av brukstilfellene.
+Det sentrale diagrammet her er det konseptuelle klassediagrammet.
+Kap10
+Systemsekvensdiagramer (SSD), ett per brukstilfelle, egentlig ett per scenario. 
+Kun aktør <-> system.
+
+OOD:
+Kap13
+Logisk arkitektur og pakker, f.eks. ui->domain->services (+util)
+Regler for kallretning ++
+Model-View Separation Principle
+Kap14
+CRC-kort?
+Kap15
+UML Interaction Diagrams, f.eks. sekvensdiagram
+Mye detaljer om notasjon her!
+Men ikke så mye om bruken. SE GAMMEL BOK???
+Kap16
+UML Class Diagrams
+Mye detaljer om notasjon her!
+Men ikke så mye om bruken. SE GAMMEL BOK???
+Kap17+
+GRASP
+Use Case Realization (i form av sekvensdiagrammer + klassediagram)
+
+
+
+
+
+
+
+

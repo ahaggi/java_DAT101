@@ -1,0 +1,62 @@
+package no.hib.dat101;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(schema="bilutleie_test", name="adresse")
+public class Adresse {
+
+	@Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer id;
+
+	private String gateadresse;
+	private Integer postnr;
+	private String poststed;
+	
+	public Adresse() {
+		
+	}
+
+	public Adresse(String gateadresse, Integer postnr, String poststed) {
+		this.gateadresse = gateadresse;
+		this.postnr = postnr;
+		this.poststed = poststed;
+	}
+
+	public String getgateadresse() {
+		return gateadresse;
+	}
+
+	public void setgateadresse(String gateadresse) {
+		this.gateadresse = gateadresse;
+	}
+
+	public Integer getpostnr() {
+		return postnr;
+	}
+
+	public void setpostnr(Integer postnr) {
+		this.postnr = postnr;
+	}
+
+	public String getpoststed() {
+		return poststed;
+	}
+
+	public void setpoststed(String poststed) {
+		this.poststed = poststed;
+	}
+
+	@Override
+	public String toString() {
+		return "Adresse [gateadresse=" + gateadresse + ", postnr=" + postnr + ", poststed=" + poststed + "]";
+	}
+	
+	
+
+}

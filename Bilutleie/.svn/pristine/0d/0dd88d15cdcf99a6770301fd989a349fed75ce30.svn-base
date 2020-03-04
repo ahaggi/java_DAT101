@@ -1,0 +1,287 @@
+package no.hib.dat101;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
+
+public class Tekstgrensesnitt {
+
+	Database db = new Database();
+	BilutleieSelskap selskap = db.hentFraDb();
+	Scanner tastatur = new Scanner(System.in);
+	private String opplysninger;
+
+	public void skrivUtSelskap() {
+		System.out.println(selskap.toString());
+	}
+
+	public void skrivUtKontorer() {
+		List<Utleiekontor> utleiekontorer = selskap.getUtleiekontor();
+		for (int i = 0; i < utleiekontorer.size(); i++) {
+			Utleiekontor kontor = utleiekontorer.get(i);
+			System.out.println(kontor.toString());
+		}
+	}
+
+	public void skrivUtBiler() {
+		System.out.println("Velg kontor:");
+		int valgKontor = tastatur.nextInt();
+		tastatur.nextLine();
+		List<Bil> biler = selskap.getUtleiekontor().get(valgKontor).getBiler();
+		for (int i = 0; i < biler.size(); i++) {
+			Bil bil1 = biler.get(i);
+			System.out.println(bil1.toString());
+		}
+	}
+
+	public void skrivUtLedigeBiler() {
+		System.out.println("Velg kontor:");
+		int valgKontor = tastatur.nextInt();
+		tastatur.nextLine();
+		List<Bil> biler = selskap.getUtleiekontor().get(valgKontor).getBiler();
+		for (int i = 0; i < biler.size(); i++) {
+			Bil bil1 = biler.get(i);
+			if (bil1.getStatus() == true) {
+				System.out.println(bil1.toString());
+			}
+		}
+	}
+
+	public void leggTilBil() {
+		System.out.println("Registreringsnummer:");
+		String regNr = tastatur.nextLine();
+		System.out.println("Merke:");
+		String merke = tastatur.nextLine();
+		System.out.println("Modell:");
+		String modell = tastatur.nextLine();
+		System.out.println("Farge:");
+		String farge = tastatur.nextLine();
+		System.out.println("Kategori(int):");
+		Kategori kat = selskap.getKategorier().get(tastatur.nextInt());
+		tastatur.nextLine();
+		System.out.println("Kilometerstand:");
+		Integer kmStand = tastatur.nextInt();
+		tastatur.nextLine();
+		System.out.println("Status:");
+		Boolean ledig = tastatur.nextBoolean();
+		System.out.println("Kontor(int):");
+		Integer valgKontor = tastatur.nextInt();
+		tastatur.nextLine();
+		Utleiekontor kontor = selskap.getUtleiekontor().get(valgKontor);
+		Bil bil = new Bil(regNr, merke, modell, farge, kat, kmStand, ledig, kontor);
+		selskap.getUtleiekontor().get(valgKontor).leggTilBil(bil);
+		db.persist();
+	}
+
+	public void søkLedigBil() {
+		System.out.println("Fra Dato:");
+		String fraDatoTemp = tastatur.nextLine();
+		Date fraDato = dato(fraDatoTemp);
+		System.out.println("Til Dato:");
+		String tilDatoTemp = tastatur.nextLine();
+		Date tilDato = dato(tilDatoTemp);
+		System.out.println("Utleiested:");
+		Integer utleiested = tastatur.nextInt();
+		tastatur.nextLine();
+		System.out.println("Retursted:");
+		Integer retursted = tastatur.nextInt();
+		tastatur.nextLine();
+		int antallDager = (int) (tilDato.getDate() - fraDato.getDate());
+		
+		visKategorier(antallDager);
+		
+		System.out.println("Velg kategori");
+		char x = tastatur.nextLine().charAt(0);
+		
+		if (x>=65 && x<=68) {
+			Kategori kategori = selskap.getKategorier().get(x-65);
+		} else {
+			System.out.println("Ugyldig verdi");
+		}
+		
+		System.out.println("Vil du fortsette?");
+		System.out.println("1. Ja");
+		System.out.println("2. Nei");
+		
+		int valg = tastatur.nextInt();
+		tastatur.nextLine();
+		
+		if(valg == 1) {
+			System.out.println("1. Ny kunde");
+			System.out.println("2. Eksisterende kunde");
+			valg = tastatur.nextInt();
+			tastatur.nextLine();
+			
+			switch (valg) {
+			case 1:
+				Kunde kunde = lagNyKunde();
+				break;
+			case 2:
+				System.out.println("Skriv inn kundenummer:");
+				break;
+			default:
+				break;
+			}
+		} 
+	}
+
+	private Date dato(String dato) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		Date dato1 = null;
+		try {
+			dato1 = dateFormat.parse(dato);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return dato1;
+	}
+	
+	private void visKategorier(int antallDager) {
+		Iterator<Kategori> it = selskap.getKategorier().iterator();
+		System.out.println("Kategori |   Pris  |");
+		while (it.hasNext()) {
+			Kategori kategori = it.next();
+			System.out.println(kategori.getType() + "   |   " + kategori.getPris() * antallDager + "    |    ");
+
+		}
+
+	}
+
+	public void leieUt() {
+
+	}
+
+	public void returner() {
+
+	}
+
+	// ********************************************************************************//
+	public Kunde lagNyKunde() {
+		System.out.println("Fornavn:");
+		String fornavn = tastatur.nextLine();
+		System.out.println("Etternavn:");
+		String etternavn = tastatur.nextLine();
+
+		Adresse adresse = lagNyAdresse();
+
+		System.out.println("telNr:");
+		int telNr = tastatur.nextInt();
+
+		Kunde kunde = new Kunde(fornavn, etternavn, adresse, telNr, selskap);
+		selskap.leggTilKunde(kunde);
+		return kunde;
+
+	}
+
+	public void lagNyUtleiekontor() {
+
+		Adresse adresse = lagNyAdresse();
+
+		System.out.println("telNr:");
+		int telNr = tastatur.nextInt();
+
+		Utleiekontor kontor = new Utleiekontor(adresse, telNr, selskap);
+		selskap.leggTilUtleiekontor(kontor);
+	}
+
+	public Adresse lagNyAdresse() {
+		System.out.println("By:");
+		String by = tastatur.nextLine();
+		System.out.println("PostNr:");
+		int postNr = tastatur.nextInt();
+		tastatur.nextLine();
+		System.out.println("Poststed:");
+		String postSted = tastatur.nextLine();
+		Adresse adresse = new Adresse(by, postNr, postSted);
+		db.persist(adresse);
+		return adresse;
+	}
+
+	public void visKategorier() {
+		Iterator<Kategori> it = selskap.getKategorier().iterator();
+		System.out.println("Kategori |   Pris  |");
+		while (it.hasNext()) {
+			Kategori kategori = it.next();
+			System.out.println(kategori.getType() + "   |   " + kategori.getPris() + "    |    ");
+
+		}
+
+	}
+
+	public void visKunde(Kunde kunde) {
+		System.out.println(kunde.toString());
+	}
+
+	public void visReservasjon(Reservasjon resv) {
+		System.out.println(resv.toString());
+	}
+
+	public void visUtleie(Utleie utl) {
+		System.out.println(utl.toString());
+	}
+
+	public void visRetur(Retur rtr) {
+		System.out.println(rtr.toString());
+	}
+	
+	public void lagNyUtleie(Reservasjon resv){
+		System.out.println("tilDato \"dd-MM-yyyy\":");
+		String til = tastatur.nextLine();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		Date tilDato=null;
+		try {
+			tilDato =dateFormat.parse(til);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		System.out.println("kreditt kort");
+		int kredittKort=tastatur.nextInt();
+		System.out.println("Betalt belop");
+		double betaltBelop=tastatur.nextInt();
+
+
+		Utleie utleie= new Utleie(resv, tilDato, kredittKort, betaltBelop);
+		utleie.getUtleieSted().leggTilUtleie(utleie); // endring i obj ==> endering i DB 
+		utleie.getKunde().leggTilUtleie(utleie);// endring i obj ==> endering i DB
+	}
+	
+	public void lagNyRetur(Utleie utl){
+		System.out.println("tilDato \"dd-MM-yyyy\":");
+		String til = tastatur.nextLine();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		Date tilDato=null;
+		try {
+			tilDato =dateFormat.parse(til);
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		System.out.println("KM tilstand:");
+		int kmStand=tastatur.nextInt();
+		
+		System.out.println("returSted:");
+		int nyReturSted = tastatur.nextInt();
+
+			Utleiekontor returSted= selskap.getUtleiekontor().get(nyReturSted -1 ); // minus 1 fordi listen begynner fra 0
+			System.out.println("Betalt belop");
+			double betaltBelop=tastatur.nextDouble();
+
+
+			Retur retur= new Retur(utl, kmStand, returSted, tilDato, betaltBelop);
+			utl.getUtleieSted().leggTilRetur(retur); // endring i obj ==> endering i DB 
+			utl.getKunde().leggTilRetur(retur);// endring i obj ==> endering i DB
+	}
+
+	public void close() {
+		db.persist();
+		db.close();
+	}
+
+}

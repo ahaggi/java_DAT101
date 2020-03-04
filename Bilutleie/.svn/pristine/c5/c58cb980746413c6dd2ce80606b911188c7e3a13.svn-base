@@ -1,0 +1,222 @@
+package no.hib.dat101;
+
+import java.util.*;
+
+import javax.persistence.*;
+
+/**
+ * @author Peter Boer, Daniel Moberg og Abdella Haji
+ *
+ */
+@Entity
+@Table(schema = "bilutleie_test")
+public class BilutleieSelskap {
+
+	@Id
+	private String navn;
+	private Integer tlfNr;
+	@OneToOne
+	@JoinColumn(name = "firmaadresse", referencedColumnName = "id", insertable = true, updatable = true)
+	private Adresse adresse;
+
+	@OneToMany(mappedBy = "bilutleieSelskap", cascade = CascadeType.ALL)
+	private List<Utleiekontor> utleiekontor = new ArrayList<Utleiekontor>();
+
+	@OneToMany(mappedBy = "bilutleieSelskap", cascade = CascadeType.ALL)
+	private List<Kunde> kunder = new ArrayList<Kunde>();
+
+	@OneToMany(mappedBy = "bilutleieSelskap", cascade = CascadeType.ALL)
+	private List<Kategori> kategorier = new ArrayList<Kategori>();
+
+	/**
+	 * Lager et nytt bilutleieSelskap.
+	 */
+	public BilutleieSelskap() {
+
+	}
+
+	public BilutleieSelskap(String navn, Integer tlfNr, Adresse adresse) {
+		this.navn = navn;
+		this.tlfNr = tlfNr;
+		this.adresse = adresse;
+		lagKategorier();
+	}
+
+	/**
+	 * Lager kategorier.
+	 */
+	public void lagKategorier() {
+		for (int i = 65; i <= 68; i++) {
+			Kategori ktg = new Kategori((char) i, this);
+			kategorier.add(ktg);
+		}
+	}
+
+	/**
+	 * Legger til kunde i ArrayList.
+	 * 
+	 * @param kunde kunde som skal legges til.
+	 * @return om kunde er lagt til eller ikke.
+	 */
+	public boolean leggTilKunde(Kunde kunde) {
+		boolean b = false;
+		if (kunder.indexOf(kunde) == -1)
+			b = kunder.add(kunde);
+		return b;
+	}
+
+	/**
+	 * Fjerner kunde fra ArrayList.
+	 * 
+	 * @param kunde kunde som skal fjernes.
+	 * @return om kunde er blit fjernet eller ikke.
+	 */
+	public boolean fjernKunde(Kunde kunde) {
+		boolean b = false;
+		if (kunder.indexOf(kunde) != -1)
+			b = kunder.remove(kunde);
+		return b;
+	}
+
+	/**
+	 * Legger til utleiekontor i ArrayList.
+	 * 
+	 * @param utleiekntr utleiekontor som skal legges til.
+	 * @return om utleiekontor er lagt til eller ikke.
+	 */
+	public boolean leggTilUtleiekontor(Utleiekontor utleiekntr) {
+		boolean b = false;
+		if (utleiekontor.indexOf(utleiekntr) == -1)
+			b = utleiekontor.add(utleiekntr);
+		return b;
+
+	}
+
+	/**
+	 * Fjerner utleiekontor fra ArrayList.
+	 * 
+	 * @param utleiekntr utleiekontor som skal fjernes.
+	 * @return om utleiekontoret er fjernet eller ikke.
+	 */
+	public boolean fjernUtleiekontor(Utleiekontor utleiekntr) {
+		boolean b = false;
+		if (utleiekontor.indexOf(utleiekntr) != -1)
+			b = utleiekontor.remove(utleiekntr);
+		return b;
+
+	}
+
+	/**
+	 * Henter navn.
+	 * 
+	 * @return navn
+	 */
+	public String getNavn() {
+		return navn;
+	}
+
+	/**
+	 * Setter navn.
+	 * 
+	 * @param navn navn
+	 */
+	public void setNavn(String navn) {
+		this.navn = navn;
+	}
+
+	/**
+	 * Henter tlfNr.
+	 * 
+	 * @return tlfNr
+	 */
+	public Integer getTlfNr() {
+		return tlfNr;
+	}
+
+	/**
+	 * Setter tlfNr.
+	 * 
+	 * @param tlfNr tlfNr
+	 */
+	public void setTlfNr(Integer tlfNr) {
+		this.tlfNr = tlfNr;
+	}
+
+	/**
+	 * Henter adresse.
+	 * 
+	 * @return adresse
+	 */
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	/**
+	 * Setter adresse.
+	 * 
+	 * @param adresse adresse
+	 */
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+	/**
+	 * Henter kunder.
+	 * 
+	 * @return kunder
+	 */
+	public List<Kunde> getKunder() {
+		return kunder;
+	}
+
+	/**
+	 * Setter kunder.
+	 * 
+	 * @param kunder kunder
+	 */
+	public void setKunder(List<Kunde> kunder) {
+		this.kunder = kunder;
+	}
+
+	/**
+	 * Henter utleiekontor.
+	 *  
+	 * @return utleiekontor
+	 */
+	public List<Utleiekontor> getUtleiekontor() {
+		return utleiekontor;
+	}
+
+	/**
+	 * Setter utleiekontor.
+	 * 
+	 * @param utleiekontor utleiekontor
+	 */
+	public void setUtleiekontor(List<Utleiekontor> utleiekontor) {
+		this.utleiekontor = utleiekontor;
+	}
+
+	/**
+	 * Henter kategorier.
+	 * 
+	 * @return kategorier
+	 */
+	public List<Kategori> getKategorier() {
+		return kategorier;
+	}
+
+	/**
+	 * Setter kategorier.
+	 * 
+	 * @param kategorier
+	 */
+	public void setKategorier(List<Kategori> kategorier) {
+		this.kategorier = kategorier;
+	}
+
+	@Override
+	public String toString() {
+		return "BilutleieSelskap [navn=" + navn + ", tlfNr=" + tlfNr + ", adresse=" + adresse + "]";
+	}
+
+}

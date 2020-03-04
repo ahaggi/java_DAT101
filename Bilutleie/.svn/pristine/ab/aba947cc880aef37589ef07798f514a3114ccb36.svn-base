@@ -1,0 +1,85 @@
+package no.hib.dat101;
+
+public class Bil {
+	
+	private String regNr;
+	private String merke;
+	private String modell;
+	private String farge;
+	private Kategori kategori;
+	private Integer kmStand;
+	private Boolean status;
+	private Utleiekontor utleiekontor;
+	
+	//default constructor til bil
+	public Bil(){
+
+	}
+	
+	Bil(String regNr, String merke, String modell, String farge, 
+			Integer kmStand, Boolean status, Kategori kategori){
+		this.regNr = regNr;
+		this.merke = merke;
+		this.modell = modell;
+		this.farge = farge;
+		this.kmStand = kmStand;
+		this.status = status;
+		this.kategori = kategori;
+	}
+
+	public String getregNr() {
+		return regNr;
+	}
+
+	public void setregNr(String regNr) {
+		this.regNr = regNr;
+	}
+
+	public String getMerke() {
+		return merke;
+	}
+
+	public void setMerke(String merke) {
+		this.merke = merke;
+	}
+
+	public String getModell() {
+		return modell;
+	}
+
+	public void setModell(String modell) {
+		this.modell = modell;
+	}
+
+	public String getFarge() {
+		return farge;
+	}
+
+	public void setFarge(String farge) {
+		this.farge = farge;
+	}
+
+	public Integer getkmStand() {
+		return kmStand;
+	}
+
+	public void setkmStand(Integer kmStand) {
+		this.kmStand = kmStand;
+	}
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
+	public Kategori getKategori() {
+		return kategori;
+	}
+
+	public void setKategori(Kategori kategori) {
+		this.kategori = kategori;
+	}
+}

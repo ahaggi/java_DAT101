@@ -1,0 +1,12 @@
+package no.hib.dat101.Utsyn;
+
+public class KlientAnstatt {
+
+	public static void main(String[] args) {
+		MenyAnsatt meny = new MenyAnsatt();
+		
+		meny.start();
+		meny.close();
+	}
+
+}

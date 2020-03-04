@@ -1,0 +1,114 @@
+package no.hib.dat101;
+
+import java.util.List;
+import java.util.Scanner;
+
+import javax.print.attribute.TextSyntax;
+
+public class Tekstgrensesnitt2 {
+
+	Database db = new Database();
+	BilutleieSelskap selskap = db.hentFraDb();
+	Scanner tastatur = new Scanner(System.in);
+
+	public void skrivUtSelskap() {
+		System.out.println(selskap.toString());
+	}
+
+	public void skrivUtKontorer() {
+		List<Utleiekontor> utleiekontorer = selskap.getUtleiekontor();
+		for (int i = 0; i < utleiekontorer.size(); i++) {
+			Utleiekontor kontor = utleiekontorer.get(i);
+			System.out.println(kontor.toString());
+		}
+	}
+
+	public void skrivUtBiler() {
+		System.out.println("Velg kontor:");
+		int valgKontor = tastatur.nextInt();
+		tastatur.nextLine();
+		List<Bil> biler = selskap.getUtleiekontor().get(valgKontor).getBiler();
+		for (int i = 0; i < biler.size(); i++) {
+			Bil bil1 = biler.get(i);
+			System.out.println(bil1.toString());
+		}
+	}
+
+	public void skrivUtLedigeBiler() {
+		System.out.println("Velg kontor:");
+		int valgKontor = tastatur.nextInt();
+		tastatur.nextLine();
+		List<Bil> biler = selskap.getUtleiekontor().get(valgKontor).getBiler();
+		for (int i = 0; i < biler.size(); i++) {
+			Bil bil1 = biler.get(i);
+			if (bil1.getStatus() == true) {
+				System.out.println(bil1.toString());
+			}
+		}
+	}
+
+	public void leggTilBil() {
+		System.out.println("Registreringsnummer:");
+		String regNr = tastatur.nextLine();
+		System.out.println("Merke:");
+		String merke = tastatur.nextLine();
+		System.out.println("Modell:");
+		String modell = tastatur.nextLine();
+		System.out.println("Farge:");
+		String farge = tastatur.nextLine();
+		System.out.println("Kategori(int):");
+		Kategori kat = selskap.getKategorier().get(tastatur.nextInt());
+		tastatur.nextLine();
+		System.out.println("Kilometerstand:");
+		Integer kmStand = tastatur.nextInt();
+		tastatur.nextLine();
+		System.out.println("Status:");
+		Boolean ledig = tastatur.nextBoolean();
+		System.out.println("Kontor(int):");
+		Integer valgKontor = tastatur.nextInt();
+		tastatur.nextLine();
+		Utleiekontor kontor = selskap.getUtleiekontor().get(valgKontor);
+		Bil bil = new Bil(regNr, merke, modell, farge, kat, kmStand, ledig, kontor);
+		selskap.getUtleiekontor().get(valgKontor).leggTilBil(bil);
+		db.persist();
+	}
+	
+//	System.out.println("Meny");
+//	System.out.println("1. Info selskap");
+//	System.out.println("2. Utleiekontorer i selskap");
+//	System.out.println("3. Biler i et bestemt utleiekontor");
+//	System.out.println("4. Ledige biler i et bestemt utleiekontor");
+//	System.out.println("5. Legg til ny bil");
+//	System.out.println("6. Legg til ny kunde");
+//	System.out.println("7. Legg til ny utleiekontor");
+//	System.out.println("8. Legg til ny adresse");
+//	System.out.println("9. Vis kategorier");
+//	System.out.println("10. Vis kunde");
+//	System.out.println("11. Vis reservasjon");
+//	System.out.println("12. Vis utleie");
+//	System.out.println("13. Vis retur");
+	public Kunde laNyKunde(){
+		System.out.println("Fornavn:");
+		String fornavn=tastatur.nextLine();
+		System.out.println("Etternavn:");
+		String etternavn=tastatur.nextLine();
+		System.out.println("By:");
+		String by=tastatur.nextLine();
+		System.out.println("PostNr:");
+		int postNr=tastatur.nextInt();
+		System.out.println("Poststed:");
+		String postSted=tastatur.nextLine();
+		Adresse adresse = new Adresse(fornavn, postNr, postSted);
+		int telNr=tastatur.nextInt();
+				
+		Kunde kunde = new Kunde(fornavn, etternavn, adresse, telNr, selskap);
+		selskap.leggTilKunde(kunde);
+		return kunde;
+		
+	}
+
+	public void close() {
+		db.close();
+	}
+
+}

@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+externalMigrateFromAuthorizationDatabase/isMigrated=true
+migrateFromAuthorizationDatabase/isMigrated=true
+repositories/20aa553b30fb00151e97da4ec436d64f=20aa553b30fb00151e97da4ec436d64f;http\://data1.hib.no\:8000/svn/v16_dat101_g10/;http\://data1.hib.no\:8000/svn/v16_dat101_g10/;branches;tags;trunk;true;086ac99f-7e6d-4040-bbdd-9ee98f8254c5;http\://data1.hib.no\:8000/svn/v16_dat101_g10;;false;<http\://data1.hib.no\:8000> VisualSVN Server;;0
+repositories/40a0e7fe08c100151a20f597aaa4f253=40a0e7fe08c100151a20f597aaa4f253;http\://mod250.hib.no/svn/v14_dat101/test/Craps;http\://mod250.hib.no/svn/v14_dat101/test/Craps;branches;tags;trunk;true;;;;false;;;0
+repositories/6003a559b6be00151710ed17e112c273=6003a559b6be00151710ed17e112c273;http\://data1.hib.no\:8000/svn/v16_dat101;http\://data1.hib.no\:8000/svn/v16_dat101;branches;tags;trunk;true;84dbea66-7a16-9745-a12c-435a4930df11;http\://data1.hib.no\:8000/svn/v16_dat101;;false;<http\://data1.hib.no\:8000> VisualSVN Server;;0

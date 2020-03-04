@@ -1,0 +1,136 @@
+package no.hib.dat101;
+
+import java.util.*;
+
+import javax.persistence.*;
+
+@Entity
+@Table(schema="bilutleie_test")
+public class BilutleieSelskap {
+
+	@Id
+	private String navn;
+	private Integer tlfNr;
+	@OneToOne
+	@JoinColumn(name="firmaadresse", referencedColumnName="id",insertable=true, updatable=true)
+	private Adresse adresse;
+
+	@OneToMany(mappedBy="bilutleieSelskap", cascade=CascadeType.ALL)
+	private List<Utleiekontor> utleiekontor = new ArrayList<Utleiekontor>();
+
+	@OneToMany(mappedBy="bilutleieSelskap", cascade=CascadeType.ALL)
+	private List<Kunde> kunder = new ArrayList<Kunde>();
+	
+	@OneToMany(mappedBy="bilutleieSelskap", cascade=CascadeType.ALL)
+	private List<Kategori> kategorier = new ArrayList<Kategori>();
+	
+	public BilutleieSelskap() {
+
+	}
+
+	public BilutleieSelskap(String navn, Integer tlfNr, Adresse adresse) {
+		this.navn = navn;
+		this.tlfNr = tlfNr;
+		this.adresse = adresse;
+		lagKategorier();
+	}
+	//trenger en metode som henter Selskap fra database.
+
+	
+	
+	// lager katergorier
+	public void lagKategorier() {
+		for (int i = 65; i <= 68; i++) {
+			Kategori ktg = new Kategori((char) i, this);
+			kategorier.add(ktg);
+		}
+	}	
+	
+	public boolean leggTilKunde(Kunde kunde) {
+		boolean b=false;
+		if (kunder.indexOf(kunde)==-1) 
+			b=kunder.add(kunde);
+		return b;
+	}
+
+	public boolean fjernKunde(Kunde kunde) {
+		boolean b=false;
+		if (kunder.indexOf(kunde)!=-1) 
+			b=kunder.remove(kunde);
+		return b;
+	}
+
+	public boolean leggTilUtleiekontor(Utleiekontor utleiekntr) {
+		boolean b=false;
+		if (utleiekontor.indexOf(utleiekntr)==-1) 
+			b=utleiekontor.add(utleiekntr);
+		return b;
+
+	}
+
+	public boolean fjernUtleiekontor(Utleiekontor utleiekntr) {
+		boolean b=false;
+		if (utleiekontor.indexOf(utleiekntr)!=-1) 
+			b=utleiekontor.remove(utleiekntr);
+		return b;
+
+	}
+
+	public String getNavn() {
+		return navn;
+	}
+
+	public void setNavn(String navn) {
+		this.navn = navn;
+	}
+
+	public Integer getTlfNr() {
+		return tlfNr;
+	}
+
+	public void setTlfNr(Integer tlfNr) {
+		this.tlfNr = tlfNr;
+	}
+
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+
+	public List<Kunde> getKunder() {
+		return kunder;
+	}
+
+	public void setKunder(List<Kunde> kunder) {
+		this.kunder = kunder;
+	}
+	
+
+	public List<Utleiekontor> getUtleiekontor() {
+		return utleiekontor;
+	}
+
+	public void setUtleiekontor(List<Utleiekontor> utleiekontor) {
+		this.utleiekontor = utleiekontor;
+	}
+
+	public List<Kategori> getKategorier() {
+		return kategorier;
+	}
+
+	public void setKategorier(List<Kategori> kategorier) {
+		this.kategorier = kategorier;
+	}
+
+	@Override
+	public String toString() {
+		return "BilutleieSelskap [navn=" + navn + ", tlfNr=" + tlfNr + ", adresse=" + adresse + "]";
+	}
+
+
+
+}

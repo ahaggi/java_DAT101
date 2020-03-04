@@ -1,0 +1,241 @@
+package no.hib.dat101;
+
+import java.util.*;
+import javax.persistence.*;
+
+
+@Entity
+@Table(schema="bilutleie_test", name="utleiekontor")
+public class Utleiekontor {
+	@Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer kontorNr;
+	
+	@OneToOne
+    @JoinColumn(name="adresse", referencedColumnName="id")
+	private Adresse adresse;
+	private Integer tlfNr;
+	
+    @OneToMany(mappedBy="utleiekontor", cascade=CascadeType.ALL)
+	private List<Bil> biler=new ArrayList<Bil>();
+	
+    @OneToMany(mappedBy="utleieSted", cascade=CascadeType.ALL)
+    private List<Reservasjon> reservasjoner=new ArrayList<Reservasjon>();
+	
+    @OneToMany(mappedBy="utleieSted", cascade=CascadeType.ALL)
+    private List<Utleie> utleie=new ArrayList<Utleie>();
+    
+    @OneToMany(mappedBy="returSted", cascade=CascadeType.ALL)
+	private List<Retur> retur=new ArrayList<Retur>();
+	
+    @ManyToOne
+    @JoinColumn(name="bilutleieselskap", referencedColumnName="navn",insertable=true, updatable=true)
+	private BilutleieSelskap bilutleieSelskap;
+
+	public Utleiekontor() {
+		
+	}
+	
+	
+	public Utleiekontor(Adresse adresse, Integer tlfNr,BilutleieSelskap bilutleieselskap) {
+		super();
+		this.adresse = adresse;
+		this.tlfNr = tlfNr;
+		this.bilutleieSelskap=bilutleieselskap;
+		
+	}
+
+	
+	
+    public Bil finnBil(Kategori kategori) {
+    	Bil funnetBil = null;
+        for (Bil bil : biler) {
+            if (bil.getKategori().equals(kategori)&& bil.getStatus()) 
+            	return funnetBil=bil;
+        }
+        return funnetBil;
+    }
+        
+        
+    public Bil hentBil(Kategori kategori) {
+    	Bil funnetBil = finnBil(kategori);
+    	funnetBil=(funnetBil==null)? hentBilfraAnnenKontor(kategori):funnetBil;
+        return funnetBil;
+    }
+
+    public Bil hentBilfraAnnenKontor(Kategori kategori) {//laaner en bil itilfellet "this" har ikke ledige biler
+    	Bil funnetBil = null;
+    	
+    	Iterator<Utleiekontor> alleKontor=bilutleieSelskap.getUtleiekontor().iterator();
+		while (alleKontor.hasNext()&& funnetBil == null) {
+			 Utleiekontor kontor =alleKontor.next();
+			 funnetBil=kontor.finnBil(kategori);
+			if (funnetBil != null){
+				kontor.fjernBil(funnetBil);
+				this.leggTilBil(funnetBil);
+				funnetBil.setUtleiekontor(this);
+			}//if
+		}//while
+    	
+    	return funnetBil;
+    }
+
+
+	public boolean leggTilBil(Bil bil) {
+		boolean b=false;
+		if (biler.indexOf(bil)==-1) 
+			b=biler.add(bil);
+		return b;
+	}
+	
+	public boolean fjernBil(Bil bil) {
+		boolean b=false;
+		if (biler.indexOf(bil)!=-1) 
+			b=biler.remove(bil);
+		return b;
+	}
+	
+	public boolean leggTilReservasjon(Reservasjon reservasjon) {
+		boolean b=false;
+		if (reservasjoner.indexOf(reservasjon)==-1) 
+			b=reservasjoner.add(reservasjon);
+		return b;
+	}
+	
+	public boolean fjernReservasjon(Reservasjon reservasjon) {
+		boolean b=false;
+		if (reservasjoner.indexOf(reservasjon)!=-1) 
+			b=reservasjoner.remove(reservasjon);
+		return b;
+	}
+	
+	public boolean leggTilUtleie(Utleie utl) {
+		boolean b=false;
+		if (this.utleie.indexOf(utl)==-1) 
+			b=this.utleie.add(utl);
+		return b;
+	}
+	public boolean fjernUtleie(Utleie utl) {
+		boolean b=false;
+		if (utleie.indexOf(utl)!=-1) 
+			b=utleie.remove(utl);
+		return b;
+	}
+
+	public boolean leggTilRetur(Retur rtr) {
+		boolean b=false;
+		if (this.retur.indexOf(rtr)==-1) 
+			b=this.retur.add(rtr);
+		return b;
+	}
+	public boolean fjernRetur(Retur rtr) {
+		boolean b=false;
+		if (retur.indexOf(rtr)!=-1) 
+			b=retur.remove(rtr);
+		return b;
+	}
+	
+	//litt ekstra ubrukte metoder som kan bruks til søke i lister
+	
+	
+	
+
+	 public Reservasjon finnReservasjon(int resv) {
+		 	Reservasjon funnet = null;
+	        for (Reservasjon r : reservasjoner) {
+	            if (r.getResNr().equals(resv)) 
+	            	return funnet=r;
+	        }
+	        return funnet;
+	    }
+	
+	 public Utleie finnUtleie(int utl) {
+		 	Utleie funnet = null;
+	        for (Utleie u : utleie) {
+	            if (u.getUtleieNr().equals(utl)) 
+	            	return funnet=u;
+	        }
+	        return funnet;
+	    }
+	 
+	 public Retur finnRetur(int rtr) {
+		 Retur funnet = null;
+	        for (Retur r : retur) {
+	            if (r.getReturNr().equals(rtr)) 
+	            	return funnet=r;
+	        }
+	        return funnet;
+	    }
+	
+	
+	public BilutleieSelskap getBilutleieSelskap() {
+		return bilutleieSelskap;
+	}
+
+
+	public void setBilutleieSelskap(BilutleieSelskap bilutleieSelskap) {
+		this.bilutleieSelskap = bilutleieSelskap;
+	}
+
+	public Integer getKontorNr() {
+		return kontorNr;
+	}
+
+	public void setKontorNr(Integer kontorNr) {
+		this.kontorNr = kontorNr;
+	}
+
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+	public Integer getTlfNr() {
+		return tlfNr;
+	}
+
+	public void setTlfNr(Integer tlfNr) {
+		this.tlfNr = tlfNr;
+	}
+
+	public List<Bil> getBiler() {
+		return biler;
+	}
+
+	public void setBiler(List<Bil> biler) {
+		this.biler = biler;
+	}
+
+	public List<Reservasjon> getReservasjoner() {
+		return reservasjoner;
+	}
+
+	public void setReservasjoner(List<Reservasjon> reservasjoner) {
+		this.reservasjoner = reservasjoner;
+	}
+
+	public List<Utleie> getUtleie() {
+		return utleie;
+	}
+
+	public void setUtleie(List<Utleie> utleie) {
+		this.utleie = utleie;
+	}
+
+	public List<Retur> getRetur() {
+		return retur;
+	}
+
+	public void setRetur(List<Retur> retur) {
+		this.retur = retur;
+	}
+
+	@Override
+	public String toString() {
+		return "Utleiekontor [kontorNr=" + kontorNr + ", adresse=" + adresse + ", tlfNr=" + tlfNr + "]";
+	}
+	
+}

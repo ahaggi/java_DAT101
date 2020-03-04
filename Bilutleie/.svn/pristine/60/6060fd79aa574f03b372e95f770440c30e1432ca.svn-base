@@ -1,0 +1,12 @@
+package no.hib.dat101;
+
+public class TestKlient2 {
+
+	public static void main(String[] args) {
+		Meny meny = new Meny();
+		
+		meny.start();
+		meny.close();
+	}
+
+}

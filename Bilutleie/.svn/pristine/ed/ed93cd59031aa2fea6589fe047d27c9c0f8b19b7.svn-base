@@ -1,0 +1,154 @@
+package no.hib.dat101;
+
+import java.util.*;
+
+import javax.persistence.*;
+
+@Entity
+@Table(schema="bilutleie_test")
+public class Retur {
+	@Id
+	private Integer returNr;
+	
+	@OneToOne
+    @JoinColumn(name="utleienr", referencedColumnName="utleienr")
+	private Utleie utleieNr;
+	
+    @ManyToOne
+    @JoinColumn(name="kunde", referencedColumnName="kundenr",insertable=true, updatable=true)
+	private Kunde kunde;
+    
+	@OneToOne
+    @JoinColumn(name="bil", referencedColumnName="regnr")
+	private Bil bil;
+	private Integer kmStand;
+	
+    @ManyToOne
+    @JoinColumn(name="retursted", referencedColumnName="kontornr",insertable=true, updatable=true)
+	private Utleiekontor returSted;
+	private Date fraDato;
+	private Date tilDato;
+	private Integer kredittKort;
+	private Double pris;
+	private Double betaltBelop;
+	
+	
+	public Retur() {
+		
+	}
+	
+	public Retur(Utleie utleieNr, Integer kmStand, Utleiekontor returSted, Date tilDato) {
+		this.utleieNr = utleieNr;
+		this.kunde = utleieNr.getKunde();
+		this.bil = utleieNr.getBil();
+		this.kmStand = kmStand;
+		this.returSted = returSted;
+		this.fraDato = utleieNr.getFraDato();
+		this.tilDato = tilDato;
+		int antallDager = (int)  (tilDato.getDate() - fraDato.getDate());
+		this.kredittKort = utleieNr.getKredittKort();
+		this.pris = bil.getKategori().beregnetPris(antallDager);
+		this.betaltBelop = utleieNr.getBetaltBelop();
+	}
+
+	public void oppdaterPris() {
+		
+	}
+	
+	public void levereBil() {
+		
+	}
+
+	public Integer getReturNr() {
+		return returNr;
+	}
+
+	public Utleie getResNr() {
+		return utleieNr;
+	}
+
+	public void setResNr(Utleie utlNr) {
+		this.utleieNr = utlNr;
+	}
+
+	public Kunde getKunde() {
+		return kunde;
+	}
+
+	public void setKunde(Kunde kunde) {
+		this.kunde = kunde;
+	}
+
+	public Bil getBil() {
+		return bil;
+	}
+
+	public void setBil(Bil bil) {
+		this.bil = bil;
+	}
+
+	public Integer getKmStand() {
+		return kmStand;
+	}
+
+	public void setKmStand(Integer kmStand) {
+		this.kmStand = kmStand;
+	}
+
+	public Utleiekontor getReturSted() {
+		return returSted;
+	}
+
+	public void setReturSted(Utleiekontor returSted) {
+		this.returSted = returSted;
+	}
+
+	public Date getFraDato() {
+		return fraDato;
+	}
+
+	public void setFraDato(Date fraDato) {
+		this.fraDato = fraDato;
+	}
+
+	public Date getTilDato() {
+		return tilDato;
+	}
+
+	public void setTilDato(Date tilDato) {
+		this.tilDato = tilDato;
+	}
+
+	public Integer getKredittKort() {
+		return kredittKort;
+	}
+
+	public void setKredittKort(Integer kredittKort) {
+		this.kredittKort = kredittKort;
+	}
+
+	public Double getPris() {
+		return pris;
+	}
+
+	public void setPris(Double pris) {
+		this.pris = pris;
+	}
+
+	public Double getBetaltBelop() {
+		return betaltBelop;
+	}
+
+	public void setBetaltBelop(Double betaltBelop) {
+		this.betaltBelop = betaltBelop;
+	}
+
+	
+
+	@Override
+	public String toString() {
+		return "Retur [returNr=" + returNr + ", utleie=" + utleieNr + ", kunde=" + kunde + ", bil=" + bil + ", kmStand="
+				+ kmStand + ", returSted=" + returSted + ", fraDato=" + fraDato + ", tilDato=" + tilDato
+				+ ", kredittKort=" + kredittKort + ", pris=" + pris + ", betaltBelop=" + betaltBelop +  "]";
+	}
+}

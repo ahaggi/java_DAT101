@@ -1,0 +1,34 @@
+package no.hib.dat101;
+
+public class System2 {
+	
+	private BilutleieSelskap selskap;
+	
+	public System2() {
+		
+	}
+	
+	public void lagNyKunde(Kunde kunde) {
+		
+	}
+	
+	public void opprettReservasjon(BilutleieSelskap selskap) {
+		
+	}
+	
+	public void visSøkResultat(Kategori kategori) {
+		
+	}
+	
+	public void bekreftReservasjon() {
+		
+	}
+	
+	public void lagNyUtleie(BilutleieSelskap selskap) {
+		
+	}
+	
+	public void lagNyRetur(BilutleieSelskap selskap) {
+		
+	}
+}

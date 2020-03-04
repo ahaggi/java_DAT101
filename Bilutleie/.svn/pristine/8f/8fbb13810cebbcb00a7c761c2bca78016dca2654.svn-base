@@ -1,0 +1,111 @@
+package no.hib.dat101;
+
+public class Kunde {
+	
+	private Integer kundeNr;
+	private String fornavn;
+	private String etternavn;
+	private Adresse adresse;
+	private Integer tlfNr;
+	private Reservasjon[] reservasjon;
+	private Utleie utleie;
+	private Retur retur;
+	
+	//constructor for vilkårlig kunde
+	public Kunde() {
+
+	}
+	
+	//konstruktør til kunde
+	Kunde(Integer kundenr, String fornavn, String etternavn, Adresse adresse, 
+			Integer tlfNr, Reservasjon reservasjon, Utleie utleie, Retur retur){
+		this.kundeNr = kundenr;
+		this.fornavn = fornavn;
+		this.etternavn = etternavn;
+		this.adresse = adresse;
+		this.tlfNr = tlfNr;
+		this.reservasjon = reservasjon; 
+		this.utleie = utleie;
+		this.retur = retur;
+	}
+	
+	public void leggTilReservasjon(Reservasjon reservasjon) {
+		
+	}
+	
+	public void fjernReservasjon(Reservasjon reservasjon) {
+		
+	}
+	
+	public void leggTilUtleie(Utleie utleie) {
+		
+	}
+	
+	public void leggTilRetur(Retur retur) {
+		
+	}
+	
+	public Integer getKundeNr() {
+		return kundeNr;
+	}
+
+	public void setKundeNr(Integer kundeNr) {
+		this.kundeNr = kundeNr;
+	}
+
+	public String getFornavn() {
+		return fornavn;
+	}
+
+	public void setFornavn(String fornavn) {
+		this.fornavn = fornavn;
+	}
+
+	public String getEtternavn() {
+		return etternavn;
+	}
+
+	public void setEtternavn(String etternavn) {
+		this.etternavn = etternavn;
+	}
+
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+	public Integer getTlfNr() {
+		return tlfNr;
+	}
+
+	public void setTlfNr(Integer tlfNr) {
+		this.tlfNr = tlfNr;
+	}
+
+	public Reservasjon[] getReservasjon() {
+		return reservasjon;
+	}
+
+	public void setReservasjon(Reservasjon[] reservasjon) {
+		this.reservasjon = reservasjon;
+	}
+
+	public Utleie getUtleie() {
+		return utleie;
+	}
+
+	public void setUtleie(Utleie utleie) {
+		this.utleie = utleie;
+	}
+
+	public Retur getRetur() {
+		return retur;
+	}
+
+	public void setRetur(Retur retur) {
+		this.retur = retur;
+	}
+}

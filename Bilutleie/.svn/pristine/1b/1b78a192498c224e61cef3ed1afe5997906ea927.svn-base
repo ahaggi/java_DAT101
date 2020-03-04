@@ -1,0 +1,132 @@
+package no.hib.dat101;
+
+import java.util.Date;
+
+import javax.persistence.*;
+
+@Entity
+@Table(schema="bilutleie_test")
+public class Reservasjon {
+	@Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer resNr;
+	
+    @ManyToOne
+    @JoinColumn(name="kunde", referencedColumnName="kundenr",insertable=true, updatable=true)
+	private Kunde kunde;
+	private Date fraDato;
+	private Date tilDato;
+	private Integer antallDager;
+	
+	@OneToOne
+    @JoinColumn(name="kategori", referencedColumnName="type")
+	private Kategori kategori;
+	private Double beregnetPris;
+	
+    @ManyToOne
+    @JoinColumn(name="utleiested", referencedColumnName="kontornr",insertable=true, updatable=true)
+	private Utleiekontor utleieSted;
+    
+    @ManyToOne
+    @JoinColumn(name="retursted", referencedColumnName="kontornr",insertable=true, updatable=true)
+	private Utleiekontor returSted;
+	
+	public Reservasjon() {
+		
+	}
+	
+	public Reservasjon(Kunde kunde, Date fraDato, Date tilDato, Kategori kategori,
+			Double beregnetPris, Utleiekontor utleieSted, Utleiekontor returSted) {
+		this.kunde = kunde;
+		this.fraDato = fraDato;
+		this.tilDato = tilDato;
+		this.antallDager = (int)  (tilDato.getDate() - fraDato.getDate());
+		this.kategori = kategori;
+		this.beregnetPris = beregnetPris;//må skrive en metode
+		this.utleieSted = utleieSted;
+		this.returSted = returSted;
+	}
+
+	public void beregnPris() {
+		
+	}
+	
+	public void visSøkResultat(Kategori kategori) {
+		
+	}
+
+	public Integer getResNr() {
+		return resNr;
+	}
+
+	public Kunde getKunde() {
+		return kunde;
+	}
+
+	public void setKunde(Kunde kunde) {
+		this.kunde = kunde;
+	}
+
+	public Date getFraDato() {
+		return fraDato;
+	}
+
+	public void setFraDato(Date fraDato) {
+		this.fraDato = fraDato;
+	}
+
+	public Date getTilDato() {
+		return tilDato;
+	}
+
+	public void setTilDato(Date tilDato) {
+		this.tilDato = tilDato;
+	}
+
+	public Integer getAntallDager() {
+		return antallDager;
+	}
+
+	public void setAntallDager(Integer antallDager) {
+		this.antallDager = antallDager;
+	}
+
+	public Kategori getKategori() {
+		return kategori;
+	}
+
+	public void setKategori(Kategori kategori) {
+		this.kategori = kategori;
+	}
+
+	public Double getBeregnetPris() {
+		return beregnetPris;
+	}
+
+	public void setBeregnetPris(Double beregnetPris) {
+		this.beregnetPris = beregnetPris;
+	}
+
+	public Utleiekontor getUtleieSted() {
+		return utleieSted;
+	}
+
+	public void setUtleieSted(Utleiekontor utleieSted) {
+		this.utleieSted = utleieSted;
+	}
+
+	public Utleiekontor getReturSted() {
+		return returSted;
+	}
+
+	public void setReturSted(Utleiekontor returSted) {
+		this.returSted = returSted;
+	}
+
+	@Override
+	public String toString() {
+		return "Reservasjon [resNr=" + resNr + ", kunde=" + kunde + ", fraDato=" + fraDato + ", tilDato=" + tilDato
+				+ ", antallDager=" + antallDager + ", kategori=" + kategori + ", beregnetPris=" + beregnetPris
+				+ ", utleieSted=" + utleieSted + ", returSted=" + returSted + "]";
+	}
+}

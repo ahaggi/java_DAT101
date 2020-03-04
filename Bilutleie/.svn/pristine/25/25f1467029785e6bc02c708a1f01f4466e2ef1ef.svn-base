@@ -1,0 +1,52 @@
+package no.hib.dat101;
+
+import java.util.Scanner;
+
+public class Meny {
+	
+	Tekstgrensesnitt tg = new Tekstgrensesnitt();
+	Scanner tastatur = new Scanner(System.in);
+	int valg = 0;
+	
+	public void start() {
+		do {
+			System.out.println("*************************************");
+			System.out.println("Meny");
+			System.out.println("1. Info selskap");
+			System.out.println("2. Utleiekontorer i selskap");
+			System.out.println("3. Biler i et bestemt utleiekontor");
+			System.out.println("4. Ledige biler i et bestemt utleiekontor");
+			System.out.println("5. Legg til ny bil");
+			System.out.println("9. Exit");
+			System.out.println("*************************************");
+
+			valg = tastatur.nextInt();
+			tastatur.nextLine();
+
+			switch (valg) {
+			case 1:
+				tg.skrivUtSelskap();
+				break;
+			case 2:
+				tg.skrivUtKontorer();
+				break;
+			case 3:
+				tg.skrivUtBiler();
+				break;
+			case 4:
+				tg.skrivUtLedigeBiler();
+				break;
+			case 5:
+				tg.leggTilBil();
+				break;
+			default:
+				System.out.println("Lukker meny");
+				break;
+			}
+		} while (valg != 9);
+	}
+	
+	public void close() {
+		tg.close();
+	}
+}

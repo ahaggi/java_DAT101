@@ -1,0 +1,118 @@
+package no.hib.dat101;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Utleiekontor {
+	
+	private Integer kontorNr;
+	private Adresse adresse;
+	private Integer tlfNr;
+	private List<Bil> biler=new ArrayList<Bil>();
+	private List<Reservasjon> reservasjoner=new ArrayList<Reservasjon>();
+	private List<Utleie> utleie=new ArrayList<Utleie>();
+	private List<Retur> retur=new ArrayList<Retur>();
+	
+	public Utleiekontor() {
+		
+	}
+	
+	
+	public Utleiekontor(Integer kontorNr, Adresse adresse, Integer tlfNr, List<Bil> biler,	List<Reservasjon> reservasjoner, List<Utleie> utleie, List<Retur> retur) {
+		super();
+		this.kontorNr = kontorNr;
+		this.adresse = adresse;
+		this.tlfNr = tlfNr;
+		this.biler = biler;
+		this.reservasjoner = reservasjoner;
+		this.utleie = utleie;
+		this.retur = retur;
+	}
+
+
+	public void leggTilBil(Bil bil) {
+		
+	}
+	
+	public void fjernBil(Bil bil) {
+		
+	}
+	
+	public void leggTilReservasjon(Reservasjon reservasjon) {
+		
+	}
+	
+	public void fjernReservasjon(Reservasjon reservasjon) {
+		
+	}
+	
+	public void leggTilUtleie(Utleie utleie) {
+		
+	}
+	
+	public void leggTilRetur(Retur retur) {
+		
+	}
+
+	public Integer getKontorNr() {
+		return kontorNr;
+	}
+
+	public void setKontorNr(Integer kontorNr) {
+		this.kontorNr = kontorNr;
+	}
+
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+	public Integer getTlfNr() {
+		return tlfNr;
+	}
+
+	public void setTlfNr(Integer tlfNr) {
+		this.tlfNr = tlfNr;
+	}
+
+	public List<Bil> getBiler() {
+		return biler;
+	}
+
+	public void setBiler(List<Bil> biler) {
+		this.biler = biler;
+	}
+
+	public List<Reservasjon> getReservasjoner() {
+		return reservasjoner;
+	}
+
+	public void setReservasjoner(List<Reservasjon> reservasjoner) {
+		this.reservasjoner = reservasjoner;
+	}
+
+	public List<Utleie> getUtleie() {
+		return utleie;
+	}
+
+	public void setUtleie(List<Utleie> utleie) {
+		this.utleie = utleie;
+	}
+
+	public List<Retur> getRetur() {
+		return retur;
+	}
+
+	public void setRetur(List<Retur> retur) {
+		this.retur = retur;
+	}
+
+	@Override
+	public String toString() {
+		return "Utleiekontor [kontorNr=" + kontorNr + ", adresse=" + adresse + ", tlfNr=" + tlfNr + "]";
+	}
+	
+}

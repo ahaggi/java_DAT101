@@ -1,0 +1,146 @@
+package no.hib.dat101;
+
+import java.util.*;
+
+import javax.persistence.*;
+
+@Entity
+@Table(schema="bilutleie_test", name="utleiekontor")
+public class Utleiekontor {
+	@Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer kontorNr;
+	
+	@OneToOne
+    @JoinColumn(name="adresse", referencedColumnName="id")
+	private Adresse adresse;
+	private Integer tlfNr;
+	
+    @OneToMany(mappedBy="utleiekontor", cascade=CascadeType.ALL)
+	private List<Bil> biler=new ArrayList<Bil>();
+	
+    @OneToMany(mappedBy="utleieSted", cascade=CascadeType.ALL)
+    private List<Reservasjon> reservasjoner=new ArrayList<Reservasjon>();
+	
+    @OneToMany(mappedBy="utleieSted", cascade=CascadeType.ALL)
+    private List<Utleie> utleie=new ArrayList<Utleie>();
+    
+    @OneToMany(mappedBy="returSted", cascade=CascadeType.ALL)
+	private List<Retur> retur=new ArrayList<Retur>();
+	
+    @ManyToOne
+    @JoinColumn(name="bilutleieselskap", referencedColumnName="navn",insertable=true, updatable=true)
+	private BilutleieSelskap bilutleieSelskap;
+
+	public Utleiekontor() {
+		
+	}
+	
+	
+	public Utleiekontor(Adresse adresse, Integer tlfNr,BilutleieSelskap bilutleieselskap) {
+		super();
+		this.adresse = adresse;
+		this.tlfNr = tlfNr;
+		this.bilutleieSelskap=bilutleieselskap;
+		
+	}
+
+
+	public BilutleieSelskap getBilutleieSelskap() {
+		return bilutleieSelskap;
+	}
+
+
+	public void setBilutleieSelskap(BilutleieSelskap bilutleieSelskap) {
+		this.bilutleieSelskap = bilutleieSelskap;
+	}
+
+
+	public void leggTilBil(Bil bil) {
+        biler.add(bil);
+	}
+	
+	public void fjernBil(Bil bil) {
+        biler.remove(bil);
+	}
+	
+	public void leggTilReservasjon(Reservasjon reservasjon) {
+		reservasjoner.add(reservasjon);
+	}
+	
+	public void fjernReservasjon(Reservasjon reservasjon) {
+		reservasjoner.remove(reservasjon);
+	}
+	
+	public void leggTilUtleie(Utleie utleie) {
+		this.utleie.add(utleie);
+
+	}
+	
+	public void leggTilRetur(Retur retur) {
+		this.retur.add(retur);
+
+	}
+
+	public Integer getKontorNr() {
+		return kontorNr;
+	}
+
+	public void setKontorNr(Integer kontorNr) {
+		this.kontorNr = kontorNr;
+	}
+
+	public Adresse getAdresse() {
+		return adresse;
+	}
+
+	public void setAdresse(Adresse adresse) {
+		this.adresse = adresse;
+	}
+
+	public Integer getTlfNr() {
+		return tlfNr;
+	}
+
+	public void setTlfNr(Integer tlfNr) {
+		this.tlfNr = tlfNr;
+	}
+
+	public List<Bil> getBiler() {
+		return biler;
+	}
+
+	public void setBiler(List<Bil> biler) {
+		this.biler = biler;
+	}
+
+	public List<Reservasjon> getReservasjoner() {
+		return reservasjoner;
+	}
+
+	public void setReservasjoner(List<Reservasjon> reservasjoner) {
+		this.reservasjoner = reservasjoner;
+	}
+
+	public List<Utleie> getUtleie() {
+		return utleie;
+	}
+
+	public void setUtleie(List<Utleie> utleie) {
+		this.utleie = utleie;
+	}
+
+	public List<Retur> getRetur() {
+		return retur;
+	}
+
+	public void setRetur(List<Retur> retur) {
+		this.retur = retur;
+	}
+
+	@Override
+	public String toString() {
+		return "Utleiekontor [kontorNr=" + kontorNr + ", adresse=" + adresse + ", tlfNr=" + tlfNr + "]";
+	}
+	
+}

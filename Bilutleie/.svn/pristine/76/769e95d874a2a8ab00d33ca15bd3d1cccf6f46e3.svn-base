@@ -1,0 +1,12 @@
+package no.hib.dat101;
+
+public class KlientKunde {
+
+	public static void main(String[] args) {
+		MenyKunde meny = new MenyKunde();
+		
+		meny.start();
+		meny.close();
+	}
+
+}
